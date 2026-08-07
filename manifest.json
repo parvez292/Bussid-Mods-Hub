@@ -1,6 +1,7 @@
 {
   "name": "Bussid Mods Hub",
   "short_name": "BUSSID MOD",
+    "version": "4.0.2",
   "description": "Bus Simulator Indonesia Mod Platform",
   "start_url": "./index.html",
   "display": "standalone",
