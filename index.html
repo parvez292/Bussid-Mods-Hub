@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Merriweather+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <meta name="app-version" content="4.0.1">
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./icon-192.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
@@ -2112,6 +2112,21 @@
             color: #5865f2
         }
 
+        .dl-platform-icon.mediafire {
+            background: #e6f2ff;
+            color: #007aff
+        }
+
+        .dl-platform-icon.sharemods {
+            background: #fef3c7;
+            color: #d97706
+        }
+
+        .dl-platform-icon.proton {
+            background: #f3e8ff;
+            color: #6d28d9
+        }
+
         .dl-group .remove-link {
             position: absolute;
             top: 11px;
@@ -3902,46 +3917,18 @@
             img.src = makeAvatar(img.dataset.name || '?')
         }
 
-        function getBadge(joinDate, isAdmin) {
-            if (isAdmin) return {
-                label: 'Admin',
-                cls: 'b-admin',
-                icon: 'fa-shield-alt'
+                function getBadge(role, badgeStr) {
+            if (role === 'admin' || badgeStr === 'admin') return { label: 'Admin', cls: 'b-admin', icon: 'fa-shield-alt' };
+            const m = {
+                legend: { label: 'Legend', cls: 'b-legend', icon: 'fa-crown' },
+                veteran: { label: 'Veteran', cls: 'b-veteran', icon: 'fa-medal' },
+                regular: { label: 'Regular', cls: 'b-regular', icon: 'fa-check-circle' },
+                rookie: { label: 'Rookie', cls: 'b-rookie', icon: 'fa-fire' },
+                newbie: { label: 'Newbie', cls: 'b-newbie', icon: 'fa-star' }
             };
-            if (!joinDate) return {
-                label: 'Newbie',
-                cls: 'b-newbie',
-                icon: 'fa-star'
-            };
-            try {
-                const days = (Date.now() - (joinDate.toDate ? joinDate.toDate() : new Date(joinDate)).getTime()) / 86400000;
-                if (days >= 365) return {
-                    label: 'Legend',
-                    cls: 'b-legend',
-                    icon: 'fa-crown'
-                };
-                if (days >= 90) return {
-                    label: 'Veteran',
-                    cls: 'b-veteran',
-                    icon: 'fa-medal'
-                };
-                if (days >= 30) return {
-                    label: 'Regular',
-                    cls: 'b-regular',
-                    icon: 'fa-check-circle'
-                };
-                if (days >= 7) return {
-                    label: 'Rookie',
-                    cls: 'b-rookie',
-                    icon: 'fa-fire'
-                }
-            } catch (_) {}
-            return {
-                label: 'Newbie',
-                cls: 'b-newbie',
-                icon: 'fa-star'
-            }
+            return m[badgeStr] || m.newbie;
         }
+
 
         function badgeHTML(b) {
             if (!b) return '';
@@ -4003,12 +3990,32 @@
 
         function getPlatformInfo(p) {
             const m = {
+                // নতুন প্ল্যাটফর্ম
                 drive: {
                     icon: 'fa-brands fa-google-drive',
-                    label: 'Drive',
+                    label: 'Google Drive',
                     color: '#1b9c40',
                     bg: '#e8f5e9'
                 },
+                mediafire: {
+                    icon: 'fas fa-fire-flame-curved',
+                    label: 'MediaFire',
+                    color: '#007aff',
+                    bg: '#e6f2ff'
+                },
+                sharemods: {
+                    icon: 'fas fa-share-nodes',
+                    label: 'ShareMods',
+                    color: '#d97706',
+                    bg: '#fef3c7'
+                },
+                proton: {
+                    icon: 'fas fa-shield-halved',
+                    label: 'Proton Drive',
+                    color: '#6d28d9',
+                    bg: '#f3e8ff'
+                },
+                // পুরোনো পোস্ট ঠিক রাখার জন্য (Backwards Compatibility)
                 telegram: {
                     icon: 'fab fa-telegram',
                     label: 'Telegram',
@@ -4950,7 +4957,8 @@
                     id: udoc.id,
                     ...udoc.data()
                 };
-                const bdg = getBadge(u.joinDate, u.role === 'admin' || u.badge === 'admin');
+                const bdg = getBadge(u.role, u.badge);
+
                 const av = u.photoURL || makeAvatar(u.name);
                 let tv = 0,
                     tl = 0,
@@ -5013,7 +5021,8 @@
                     else rej++
                 });
                 const photo = userProfile.photoURL || makeAvatar(userProfile.name || '?');
-                const bdg = getBadge(userProfile.joinDate, userProfile.role === 'admin' || userProfile.badge === 'admin');
+                const bdg = getBadge(userProfile.role, userProfile.badge);
+
                 const total = appr + pend + rej;
                 const soc = userProfile.socialLinks || {};
                 let cs = 0;
@@ -5261,24 +5270,29 @@
         }
 
         /* ═══════════════════════════════════
-           DOWNLOAD LINKS
-        ═══════════════════════════════════ */
-        const MAX_LINKS = 3;
+              DOWNLOAD LINKS CONFIGURATION
+           ═══════════════════════════════════ */
+        const MAX_LINKS = 4; // ৪টি লিংক সাপোর্ট করার জন্য
         const PLATFORMS = [{
             value: 'drive',
             label: 'Google Drive',
             icon: 'fa-brands fa-google-drive',
             cls: 'drive'
         }, {
-            value: 'telegram',
-            label: 'Telegram',
-            icon: 'fab fa-telegram',
-            cls: 'telegram'
+            value: 'mediafire',
+            label: 'MediaFire',
+            icon: 'fas fa-fire-flame-curved',
+            cls: 'mediafire'
         }, {
-            value: 'discord',
-            label: 'Discord',
-            icon: 'fab fa-discord',
-            cls: 'discord'
+            value: 'sharemods',
+            label: 'ShareMods',
+            icon: 'fas fa-share-nodes',
+            cls: 'sharemods'
+        }, {
+            value: 'proton',
+            label: 'Proton Drive',
+            icon: 'fas fa-shield-halved',
+            cls: 'proton'
         }];
 
         function addDownloadLink(platform = '', url = '') {
@@ -5448,7 +5462,8 @@
                     ...ud.data()
                 };
                 const isAdmin = userProfile.role === 'admin' || userProfile.badge === 'admin';
-                const bdg = getBadge(userProfile.joinDate, isAdmin);
+                const bdg = getBadge(userProfile.role, userProfile.badge);
+
                 if (editId) {
                     const existingDoc = await db.collection('posts').doc(editId).get();
                     if (!existingDoc.exists) throw new Error('Post not found');
@@ -5789,15 +5804,15 @@
             });
         });
     </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then((reg) => console.log('Service Worker Registered!', reg))
-        .catch((err) => console.error('Service Worker Registration Failed!', err));
-    });
-  }
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker Registered!', reg))
+                    .catch((err) => console.error('Service Worker Registration Failed!', err));
+            });
+        }
+    </script>
 
 </body>
 
