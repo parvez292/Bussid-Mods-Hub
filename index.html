@@ -3795,13 +3795,23 @@
         </div>
     </div>
 
-    <!-- ══ SCROLL TOP ══ -->
-    <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
-        <i class="fas fa-chevron-up"></i>
-    </button>
+      <!-- ══ POPUP NOTICE MODAL ══ -->
+    <div id="notice-modal" class="modal-backdrop hidden" style="z-index: 99999;">
+        <div class="auth-box" style="margin: auto; transform: none; animation: popIn 0.3s cubic-bezier(.16, 1, .3, 1);">
+            <div style="text-align:center; margin-bottom:16px;">
+                <div style="width:64px;height:64px;background:var(--accent-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--accent);font-size:26px;">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h2 style="font-size:20px;font-weight:900;color:var(--t1);font-family:var(--fd)" id="notice-title">Notice</h2>
+            </div>
+            <div style="font-size:14.5px;color:var(--t2);line-height:1.6;text-align:center;margin-bottom:24px;white-space:pre-line;" id="notice-msg"></div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <a id="notice-action-btn" href="#" target="_blank" class="btn btn-primary btn-full hidden">Action</a>
+                <button class="btn btn-ghost btn-full" onclick="document.getElementById('notice-modal').classList.add('hidden')">Close</button>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        'use strict';
         /* ═══════════════════════════════════
            FIREBASE CONFIG 
         ═══════════════════════════════════ */
@@ -3815,6 +3825,52 @@
             measurementId: "G-R3K55Z1WK4"
         };
         const IMGBB = "ae035fee1535172e50" + "bab0ad8d417031";
+
+        /* ═══════════════════════════════════
+           POPUP NOTICE CHECKER
+        ═══════════════════════════════════ */
+        async function checkLatestNotice() {
+            if (!currentUser) return;
+            try {
+                // ইউজারের সর্বশেষ নোটিশটি নিয়ে আসবে
+                const snap = await db.collection('notifications')
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .limit(1).get();
+                    
+                if (snap.empty) return;
+                
+                const doc = snap.docs[0];
+                const n = doc.data();
+                
+                // শুধুমাত্র Admin এর গ্লোবাল নোটিশ (target: 'all') পপ-আপ হবে
+                if (n.target !== 'all') return;
+                
+                // লোকাল স্টোরেজ চেক করবে, যাতে এক নোটিশ বারবার না দেখায়
+                const lastSeen = localStorage.getItem('last_popup_id');
+                if (lastSeen === doc.id) return; 
+                
+                // পপ-আপে ডেটা বসানো
+                $('notice-title').textContent = n.title || 'Announcement';
+                $('notice-msg').textContent = n.message || '';
+                
+                const actionBtn = $('notice-action-btn');
+                if (n.btnText && n.btnLink) {
+                    actionBtn.textContent = n.btnText;
+                    actionBtn.href = n.btnLink;
+                    actionBtn.classList.remove('hidden');
+                } else {
+                    actionBtn.classList.add('hidden'); // লিংক না থাকলে বাটন লুকানো থাকবে
+                }
+                
+                // পপ-আপ শো করানো এবং আইডি সেভ করে রাখা
+                $('notice-modal').classList.remove('hidden');
+                localStorage.setItem('last_popup_id', doc.id);
+            } catch (e) {
+                console.warn('Notice popup failed:', e);
+            }
+        }
+
 
         /* ═══════════════════════════════════
            STATE
@@ -4269,6 +4325,9 @@
         /* ═══════════════════════════════════
            FIREBASE INIT
         ═══════════════════════════════════ */
+                /* ═══════════════════════════════════
+           FIREBASE INIT
+        ═══════════════════════════════════ */
         function initFirebase() {
             try {
                 if (!firebase.apps.length) firebase.initializeApp(FB);
@@ -4287,28 +4346,31 @@
                                 };
                                 if (userProfile.banned) {
                                     $('banned-screen').classList.remove('hidden');
-                                    return
+                                    return;
                                 }
                             }
                         } catch (e) {
-                            console.warn(e)
+                            console.warn(e);
                         }
                         $('auth-screen').classList.add('hidden');
                         $('app').style.display = 'block';
+                        
                         initNotifListener();
                         initMsgListener();
                         navTo('home');
                         loadQuickStats();
+                        checkLatestNotice(); // <-- পপ-আপ নোটিশ চেক করার ফাংশন এখানে কল করা হলো
+                        
                     } else {
                         currentUser = null;
                         userProfile = null;
                         if (unsubNotif) {
                             unsubNotif();
-                            unsubNotif = null
+                            unsubNotif = null;
                         }
                         if (unsubChat) {
                             unsubChat();
-                            unsubChat = null
+                            unsubChat = null;
                         }
                         $('auth-screen').classList.remove('hidden');
                         $('app').style.display = 'none';
@@ -4317,9 +4379,10 @@
             } catch (e) {
                 console.error(e);
                 $('loading-screen').classList.add('hidden');
-                showToast('Firebase error. Refresh.', 'error')
+                showToast('Firebase error. Refresh.', 'error');
             }
         }
+
 
         /* ═══════════════════════════════════
            NOTIFICATION LISTENER
