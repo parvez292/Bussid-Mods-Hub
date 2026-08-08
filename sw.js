@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bussid-mods-v4.0.4';
+const CACHE_NAME = 'bussid-mods-v4.0.5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
