@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Merriweather+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <meta name="app-version" content="4.0.3">
+    <meta name="app-version" content="4.0.5">
     <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" href="./icon-192.png">
 
@@ -3855,7 +3855,7 @@
             <div class="loading-logo"><i class="fas fa-bus"></i></div>
             <div class="loading-brand" style="margin-top:16px">Bussid Mods Hub</div>
             <div class="loading-sub" style="margin-top:6px">Loading your experience…</div>
-            <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--grd);padding:3px 12px;border-radius:50px;box-shadow:0 4px 12px rgba(18,70,214,.3)"><span style="color:#fff;font-weight:800;font-size:11px;font-family:var(--fd)">APK v4.0.3</span></div>
+            <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--grd);padding:3px 12px;border-radius:50px;box-shadow:0 4px 12px rgba(18,70,214,.3)"><span style="color:#fff;font-weight:800;font-size:11px;font-family:var(--fd)">APK v4.0.5</span></div>
         </div>
         <div class="spin"></div>
     </div>
@@ -3868,6 +3868,9 @@
         <h2 style="font-size:24px;font-weight:900;color:var(--t1);font-family:var(--fd)">Account Banned</h2>
         <p style="font-size:14px;color:var(--t2);max-width:300px;line-height:1.6">Your account has been suspended. Please contact support.</p>
         <button class="btn btn-danger" onclick="doLogout()" style="margin-top:16px"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+        <a href="https://t.me/annonymous707" target="_blank" class="btn btn-ghost" style="margin-top:10px; color:var(--t2); border-color:var(--border); text-decoration:none;">
+            <i class="fab fa-telegram" style="color:#0088cc"></i> Contact Helpline
+        </a>
     </div>
 
     <!-- ══ AUTH ══ -->
@@ -3932,7 +3935,7 @@
                 <button class="topbar-logo" onclick="navTo('home')">
                     <div class="logo-icon"><i class="fas fa-bus"></i></div>
                     Bussid Mods Hub
-                    <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--accent);color:#fff;-webkit-text-fill-color:#fff;font-family:var(--fb);letter-spacing:.04em;flex-shrink:0">v4.0.3</span>
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--accent);color:#fff;-webkit-text-fill-color:#fff;font-family:var(--fb);letter-spacing:.04em;flex-shrink:0">v4.0.5</span>
                 </button>
                 <div class="topbar-actions">
                     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><i id="theme-ico" class="fas fa-moon"></i></button>
@@ -4053,6 +4056,11 @@
                         <div class="char-counter" id="cr-desc-count">0 / 1000</div>
                         <div class="err-msg" id="cr-desc-err">Description must be at least 10 characters</div>
                     </div>
+                    <div class="form-row">
+                        <label class="fl">Promotional Link (Optional)</label>
+                        <input type="url" class="inp" id="cr-promo-link" placeholder="e.g. YouTube video or Social link">
+                    </div>
+
                     <div class="form-row">
                         <label class="fl">Download Links <span class="req">*</span> <span style="font-weight:500;color:var(--t3);font-size:12px">(max 3)</span></label>
                         <div id="download-links-container"></div>
@@ -4258,19 +4266,31 @@
                     <div class="adm-stat-grid">
                         <div class="adm-stat-card" onclick="adminNavTo('users')">
                             <div class="adm-stat-icon" style="background:rgba(18,70,214,.12)">👥</div>
-                            <div><div class="adm-stat-val" id="ds-users">—</div><div class="adm-stat-lbl">Users</div></div>
+                            <div>
+                                <div class="adm-stat-val" id="ds-users">—</div>
+                                <div class="adm-stat-lbl">Users</div>
+                            </div>
                         </div>
                         <div class="adm-stat-card" onclick="adminNavTo('posts')">
                             <div class="adm-stat-icon" style="background:rgba(5,150,105,.12)">📦</div>
-                            <div><div class="adm-stat-val" id="ds-posts">—</div><div class="adm-stat-lbl">Posts</div></div>
+                            <div>
+                                <div class="adm-stat-val" id="ds-posts">—</div>
+                                <div class="adm-stat-lbl">Posts</div>
+                            </div>
                         </div>
                         <div class="adm-stat-card" onclick="adminNavTo('posts')">
                             <div class="adm-stat-icon" style="background:rgba(217,119,6,.12)">⏳</div>
-                            <div><div class="adm-stat-val" id="ds-pending" style="color:var(--warn)">—</div><div class="adm-stat-lbl">Pending</div></div>
+                            <div>
+                                <div class="adm-stat-val" id="ds-pending" style="color:var(--warn)">—</div>
+                                <div class="adm-stat-lbl">Pending</div>
+                            </div>
                         </div>
                         <div class="adm-stat-card" onclick="adminNavTo('messages')">
                             <div class="adm-stat-icon" style="background:rgba(8,145,178,.12)">💬</div>
-                            <div><div class="adm-stat-val" id="ds-chats">—</div><div class="adm-stat-lbl">Chats</div></div>
+                            <div>
+                                <div class="adm-stat-val" id="ds-chats">—</div>
+                                <div class="adm-stat-lbl">Chats</div>
+                            </div>
                         </div>
                     </div>
                     <div class="adm-sec-title">Recent Posts</div>
@@ -4290,10 +4310,17 @@
 
                 <!-- Users -->
                 <div id="adm-users-view" class="adm-sub">
-                    <div class="adm-search-bar" style="display:flex;align-items:center;gap:10px">
-                        <input type="search" class="inp" id="user-search-inp" placeholder="Search by name or email…" oninput="admFilterUsers(this.value)" style="flex:1">
+                    <div class="adm-search-bar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                        <input type="search" class="inp" id="user-search-inp" placeholder="Search by name or email…" oninput="admFilterAndSortUsers()" style="flex:1;min-width:120px;">
+                        <select id="adm-user-sort" class="inp" style="width:auto;padding:8px 30px 8px 12px;font-size:12.5px" onchange="admFilterAndSortUsers()">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="role">Admin First</option>
+                        </select>
                         <span id="user-count" style="font-size:12px;color:var(--t3);font-weight:700;flex-shrink:0"></span>
                     </div>
+
                     <div id="users-content"></div>
                 </div>
 
@@ -4439,7 +4466,7 @@
         </div>
     </div>
 
-      <!-- ══ POPUP NOTICE MODAL ══ -->
+    <!-- ══ POPUP NOTICE MODAL ══ -->
     <div id="notice-modal" class="modal-backdrop hidden" style="z-index: 99999;">
         <div class="auth-box" style="margin: auto; transform: none; animation: popIn 0.3s cubic-bezier(.16, 1, .3, 1);">
             <div style="text-align:center; margin-bottom:16px;">
@@ -4574,48 +4601,107 @@
         /* ═══════════════════════════════════
            POPUP NOTICE CHECKER
         ═══════════════════════════════════ */
+        /* ═══════════════════════════════════
+           POPUP NOTICE & SPECIAL EVENTS
+        ═══════════════════════════════════ */
+        async function checkSpecialPopups() {
+            if (!currentUser) return false;
+
+            // ১. নতুন একাউন্টে লগইন (Welcome Message)
+            if (!localStorage.getItem('welcome_shown_' + currentUser.uid)) {
+                $('notice-title').innerHTML = '🎉 স্বাগতম!';
+                $('notice-msg').textContent = 'Bussid Mods Hub-এ আপনাকে স্বাগতম। চমৎকার সব মোড ডাউনলোড করুন এবং আপনার নিজের মোড শেয়ার করুন!';
+                $('notice-action-btn').classList.add('hidden');
+                $('notice-modal').classList.remove('hidden');
+                localStorage.setItem('welcome_shown_' + currentUser.uid, 'true');
+                return true;
+            }
+
+            // ২. লিডারবোর্ড পপ-আপ (শুক্রবার হলে চেক করবে)
+            const today = new Date();
+            if (today.getDay() === 5) { // 5 মানে শুক্রবার 
+                const weekKey = 'lb_popup_' + today.getFullYear() + '_' + Math.ceil(today.getDate() / 7);
+                if (!localStorage.getItem(weekKey + '_' + currentUser.uid)) {
+                    try {
+                        const wa = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                        const snap = await db.collection('posts').where('status', '==', 'approved').where('createdAt', '>=', firebase.firestore.Timestamp.fromDate(wa)).get();
+                        const authors = {};
+                        snap.forEach(d => {
+                            const p = d.data();
+                            if (p.authorId) {
+                                authors[p.authorId] = (authors[p.authorId] || 0) + ((p.downloads || 0) * 2) + (p.likes || 0);
+                            }
+                        });
+                        const sorted = Object.entries(authors).sort((a, b) => b[1] - a[1]).slice(0, 10);
+                        const myRank = sorted.findIndex(x => x[0] === currentUser.uid);
+
+                        // টপ ১০-এ থাকলে পপ-আপ দেখাবে
+                        if (myRank !== -1) {
+                            $('notice-title').innerHTML = '🏆 লিডারবোর্ড আপডেট!';
+                            $('notice-msg').textContent = `অভিনন্দন! এই সপ্তাহে আপনি লিডারবোর্ডে #${myRank + 1} পজিশনে আছেন! আপনার পয়েন্ট: ${sorted[myRank][1]}`;
+                            const btn = $('notice-action-btn');
+                            btn.href = '#';
+                            btn.textContent = 'লিডারবোর্ড দেখুন';
+                            btn.onclick = (e) => {
+                                e.preventDefault();
+                                navTo('leaderboard');
+                                $('notice-modal').classList.add('hidden');
+                            };
+                            btn.classList.remove('hidden');
+                            $('notice-modal').classList.remove('hidden');
+                            localStorage.setItem(weekKey + '_' + currentUser.uid, 'true');
+                            return true;
+                        }
+                    } catch (e) {}
+                }
+            }
+            return false;
+        }
+
         async function checkLatestNotice() {
             if (!currentUser) return;
+
+            // আগে স্পেশাল পপ-আপ (Welcome/Leaderboard) চেক করবে
+            const specialShown = await checkSpecialPopups();
+            if (specialShown) return; // স্পেশাল পপ-আপ দেখালে সাধারণ নোটিশ আপাতত দেখাবে না
+
             try {
                 // ইউজারের সর্বশেষ নোটিশটি নিয়ে আসবে
                 const snap = await db.collection('notifications')
                     .where('userId', '==', currentUser.uid)
                     .orderBy('createdAt', 'desc')
                     .limit(1).get();
-                    
+
                 if (snap.empty) return;
-                
+
                 const doc = snap.docs[0];
                 const n = doc.data();
-                
-                // শুধুমাত্র Admin এর গ্লোবাল নোটিশ (target: 'all') পপ-আপ হবে
-                if (n.target !== 'all') return;
-                
-                // লোকাল স্টোরেজ চেক করবে, যাতে এক নোটিশ বারবার না দেখায়
+
+                // গ্লোবাল নোটিশ অথবা এডমিনের পাঠানো স্পেশাল পপ-আপ হলে শো করবে
+                if (n.target !== 'all' && n.isPopup !== true) return;
+
                 const lastSeen = localStorage.getItem('last_popup_id');
-                if (lastSeen === doc.id) return; 
-                
-                // পপ-আপে ডেটা বসানো
-                $('notice-title').textContent = n.title || 'Announcement';
+                if (lastSeen === doc.id) return;
+
+                $('notice-title').innerHTML = n.title || 'Announcement';
                 $('notice-msg').textContent = n.message || '';
-                
+
                 const actionBtn = $('notice-action-btn');
                 if (n.btnText && n.btnLink) {
                     actionBtn.textContent = n.btnText;
                     actionBtn.href = n.btnLink;
+                    actionBtn.onclick = null; // রিসেট
                     actionBtn.classList.remove('hidden');
                 } else {
-                    actionBtn.classList.add('hidden'); // লিংক না থাকলে বাটন লুকানো থাকবে
+                    actionBtn.classList.add('hidden');
                 }
-                
-                // পপ-আপ শো করানো এবং আইডি সেভ করে রাখা
+
                 $('notice-modal').classList.remove('hidden');
                 localStorage.setItem('last_popup_id', doc.id);
             } catch (e) {
                 console.warn('Notice popup failed:', e);
             }
         }
-
 
         /* ═══════════════════════════════════
            STATE
@@ -4728,14 +4814,38 @@
                 .replace(/'/g, '&#39;')
         }
 
-                function getBadge(role, badgeStr) {
-            if (role === 'admin' || badgeStr === 'admin') return { label: 'Admin', cls: 'b-admin', icon: 'fa-shield-alt' };
+        function getBadge(role, badgeStr) {
+            if (role === 'admin' || badgeStr === 'admin') return {
+                label: 'Admin',
+                cls: 'b-admin',
+                icon: 'fa-shield-alt'
+            };
             const m = {
-                legend: { label: 'Legend', cls: 'b-legend', icon: 'fa-crown' },
-                veteran: { label: 'Veteran', cls: 'b-veteran', icon: 'fa-medal' },
-                regular: { label: 'Regular', cls: 'b-regular', icon: 'fa-check-circle' },
-                rookie: { label: 'Rookie', cls: 'b-rookie', icon: 'fa-fire' },
-                newbie: { label: 'Newbie', cls: 'b-newbie', icon: 'fa-star' }
+                legend: {
+                    label: 'Legend',
+                    cls: 'b-legend',
+                    icon: 'fa-crown'
+                },
+                veteran: {
+                    label: 'Veteran',
+                    cls: 'b-veteran',
+                    icon: 'fa-medal'
+                },
+                regular: {
+                    label: 'Regular',
+                    cls: 'b-regular',
+                    icon: 'fa-check-circle'
+                },
+                rookie: {
+                    label: 'Rookie',
+                    cls: 'b-rookie',
+                    icon: 'fa-fire'
+                },
+                newbie: {
+                    label: 'Newbie',
+                    cls: 'b-newbie',
+                    icon: 'fa-star'
+                }
             };
             return m[badgeStr] || m.newbie;
         }
@@ -5091,7 +5201,7 @@
         /* ═══════════════════════════════════
            FIREBASE INIT
         ═══════════════════════════════════ */
-                /* ═══════════════════════════════════
+        /* ═══════════════════════════════════
            FIREBASE INIT
         ═══════════════════════════════════ */
         function initFirebase() {
@@ -5120,13 +5230,13 @@
                         }
                         $('auth-screen').classList.add('hidden');
                         $('app').style.display = 'block';
-                        
+
                         initNotifListener();
                         initMsgListener();
                         navTo('home');
                         loadQuickStats();
                         checkLatestNotice(); // <-- পপ-আপ নোটিশ চেক করার ফাংশন এখানে কল করা হলো
-                        
+
                     } else {
                         currentUser = null;
                         userProfile = null;
@@ -5452,6 +5562,7 @@
                 const editBtn = isOwner ? `<button onclick="openEditPost('${p.id}')" class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px;border:1.5px dashed var(--border)"><i class="fas fa-edit"></i> Edit Post ${p.status==='approved'?'(Re-approval needed)':''}</button>` : '';
                 // Message poster button (not shown to self)
                 const msgBtn = (!isOwner && p.authorId) ? `<button onclick="startChat('${p.authorId}','${(p.authorName||'').replace(/'/g,"\\'")}','${p.authorPhoto||''}')" class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px"><i class="fas fa-comment-dots"></i> Message Poster</button>` : '';
+                const promoBtnHTML = (p.promoLink && isValidUrl(p.promoLink)) ? `<a href="${p.promoLink}" target="_blank" rel="noopener" class="btn btn-ghost btn-full" style="margin-top:10px; border:1.5px dashed var(--accent); color:var(--accent)"><i class="fas fa-external-link-alt"></i> Promotional Link / Video</a>` : '';
                 $('detail-content').innerHTML = `
       ${imgs[0]?`<div style="position:relative"><img src="${imgs[0]}" class="detail-hero" onerror="onImgError(this)" onclick="openLightbox('${imgs[0]}',${imgsJSON})">${imgs.length>1?`<div class="img-count-pill"><i class="fas fa-images"></i> ${imgs.length} photos</div>`:''}</div>`:`<div class="detail-hero-empty"><i class="fas fa-image"></i></div>`}
       <div class="detail-body">
@@ -5484,7 +5595,8 @@
           <div class="desc-box-label">Description</div>
           <div class="desc-text">${p.description||'No description.'}</div>
         </div>
-        <div class="dl-buttons">${dlHTML}</div>
+             <div class="dl-buttons">${dlHTML}</div>
+        ${promoBtnHTML}
         ${msgBtn}${editBtn}
       </div>${galHTML}`;
                 ref.update({
@@ -5554,7 +5666,7 @@
             }
         }
 
-            /* ═══════════════════════════════════
+        /* ═══════════════════════════════════
            NOTIFICATIONS
         ═══════════════════════════════════ */
         async function loadNotifications() {
@@ -5588,11 +5700,11 @@
                     };
                     const ic = im[n.type] || 'fa-bell';
                     const co = cm[n.type] || 'var(--accent)';
-                    
+
                     // 🔔 নতুন যুক্ত করা হলো: বাটন থাকলে সেটি লিস্টে শো করানোর কোড
-                    const actionButton = (n.btnText && n.btnLink) 
-                        ? `<a href="${n.btnLink}" target="_blank" onclick="event.stopPropagation()" class="btn btn-primary btn-sm" style="margin-top:8px; padding:6px 14px; font-size:11.5px; text-decoration:none;"><i class="fas fa-link"></i> ${n.btnText}</a>` 
-                        : '';
+                    const actionButton = (n.btnText && n.btnLink) ?
+                        `<a href="${n.btnLink}" target="_blank" onclick="event.stopPropagation()" class="btn btn-primary btn-sm" style="margin-top:8px; padding:6px 14px; font-size:11.5px; text-decoration:none;"><i class="fas fa-link"></i> ${n.btnText}</a>` :
+                        '';
 
                     html += `<div class="notif-item ${n.read?'':'unread'}" onclick="markOneRead('${n.id}')">
                         <div class="notif-icon" style="color:${co}"><i class="fas ${ic}"></i></div>
@@ -5912,7 +6024,7 @@
   <button onclick="window.open('https://t.me/annonymous707','_blank')" class="btn btn-ghost btn-full"><i class="fab fa-telegram" style="color:#0088cc"></i> Contact Developer</button>
   <button onclick="doLogout()" class="btn btn-full" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
 </div>
-<div class="about-card"><div class="about-card-title"><i class="fas fa-info-circle" style="color:var(--accent)"></i> About Bussid Mods Hub</div><p>A community platform for Bus Simulator Indonesia mod creators and enthusiasts. Share skins, car mods, road mods, templates, and codenames.</p><div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:var(--grd);padding:5px 14px;border-radius:50px;box-shadow:0 4px 14px rgba(18,70,214,.3)"><i class="fas fa-rocket" style="color:#fff;font-size:11px"></i><span style="color:#fff;font-weight:800;font-size:12px;font-family:var(--fd)">Version 4.0.3</span></div></div>`
+<div class="about-card"><div class="about-card-title"><i class="fas fa-info-circle" style="color:var(--accent)"></i> About Bussid Mods Hub</div><p>A community platform for Bus Simulator Indonesia mod creators and enthusiasts. Share skins, car mods, road mods, templates, and codenames.</p><div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:var(--grd);padding:5px 14px;border-radius:50px;box-shadow:0 4px 14px rgba(18,70,214,.3)"><i class="fas fa-rocket" style="color:#fff;font-size:11px"></i><span style="color:#fff;font-weight:800;font-size:12px;font-family:var(--fd)">Version 4.0.5</span></div></div>`
             } catch (e) {
                 $('profile-content').innerHTML = '<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3></div>'
             }
@@ -6284,37 +6396,57 @@
             const title = $('cr-title').value.trim();
             const cat = $('cr-cat').value;
             const desc = $('cr-desc').value.trim();
+            const promoLink = $('cr-promo-link').value.trim(); // প্রোমো লিংক
             const links = getDownloadLinks();
             const files = $('post-images').files;
             const editId = $('edit-post-id').value;
             let valid = true;
+
             if (!title) {
                 $('cr-title').classList.add('inp-error');
                 showErrMsg('cr-title-err');
-                valid = false
+                valid = false;
             }
             if (!cat) {
                 $('cr-cat').classList.add('inp-error');
                 showErrMsg('cr-cat-err');
-                valid = false
+                valid = false;
             }
             if (desc.length < 10) {
                 $('cr-desc').classList.add('inp-error');
                 showErrMsg('cr-desc-err');
-                valid = false
+                valid = false;
             }
+
+            // ডেসক্রিপশনে লিংক চেক (কড়াকড়ি)
+            const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)/gi;
+            if (urlRegex.test(desc)) {
+                $('cr-desc').classList.add('inp-error');
+                const errEl = $('cr-desc-err');
+                errEl.textContent = "কোনো প্রকার লিংক Description এ দেওয়া যাবে না!";
+                errEl.classList.add('show');
+                showToast('Description এ লিংক এলাউড নয়!', 'error');
+                valid = false;
+            }
+
+            // ডাউনলোড লিংকে কড়াকড়ি
             if (!links.length) {
                 showErrMsg('cr-dl-err');
-                valid = false
+                showToast('দয়া করে সঠিক ডাউনলোড লিংক দিন (http/https সহ)', 'error');
+                valid = false;
             }
+
+            if (promoLink && !isValidUrl(promoLink)) {
+                showToast('Promotional Link টি সঠিক নয়', 'error');
+                valid = false;
+            }
+
             if (!editId && (!files || !files.length)) {
                 showErrMsg('cr-img-err');
-                valid = false
+                valid = false;
             }
-            if (!valid) {
-                showToast('Please fix the errors above', 'warn');
-                return
-            }
+            if (!valid) return;
+
             setBtnLoading('cr-btn', true);
             try {
                 const ud = await db.collection('users').doc(currentUser.uid).get();
@@ -6325,54 +6457,40 @@
                 const isAdmin = userProfile.role === 'admin' || userProfile.badge === 'admin';
                 const bdg = getBadge(userProfile.role, userProfile.badge);
 
+                const postData = {
+                    title,
+                    category: cat,
+                    description: desc,
+                    downloadLinks: links,
+                    promoLink: promoLink,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
                 if (editId) {
                     const existingDoc = await db.collection('posts').doc(editId).get();
                     if (!existingDoc.exists) throw new Error('Post not found');
                     const existing = existingDoc.data();
                     let imageUrls = existing.images || [];
-                    if (files && files.length > 0) {
-                        const nu = await uploadMultipleImages(Array.from(files));
-                        imageUrls = nu
-                    }
-                    const wasApproved = existing.status === 'approved';
-                    const upd = {
-                        title,
-                        category: cat,
-                        description: desc,
-                        downloadLinks: links,
-                        images: imageUrls,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    if (wasApproved && !isAdmin) {
-                        upd.pendingEdit = {
-                            title,
-                            category: cat,
-                            description: desc,
-                            downloadLinks: links,
-                            images: imageUrls,
-                            requestedAt: firebase.firestore.FieldValue.serverTimestamp()
-                        };
-                        await db.collection('posts').doc(editId).update(upd);
-                        showToast('Edit submitted for approval 🕐', 'info')
-                    } else if (isAdmin) {
-                        upd.status = 'approved';
-                        await db.collection('posts').doc(editId).update(upd);
-                        showToast('Updated & approved ✅', 'success')
+                    if (files && files.length > 0) imageUrls = await uploadMultipleImages(Array.from(files));
+                    postData.images = imageUrls;
+
+                    if (existing.status === 'approved' && !isAdmin) {
+                        await db.collection('posts').doc(editId).update({
+                            pendingEdit: {
+                                ...postData,
+                                requestedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            }
+                        });
+                        showToast('Edit submitted for approval 🕐', 'info');
                     } else {
-                        await db.collection('posts').doc(editId).update(upd);
-                        showToast('Post updated ✅', 'success')
+                        if (isAdmin) postData.status = 'approved';
+                        await db.collection('posts').doc(editId).update(postData);
+                        showToast(isAdmin ? 'Updated & approved ✅' : 'Post updated ✅', 'success');
                     }
                 } else {
-                    let imageUrls = [];
-                    if (files && files.length) {
-                        imageUrls = await uploadMultipleImages(Array.from(files));
-                        if (!imageUrls.length) throw new Error('No images uploaded')
-                    }
+                    let imageUrls = await uploadMultipleImages(Array.from(files));
                     await db.collection('posts').add({
-                        title,
-                        category: cat,
-                        description: desc,
-                        downloadLinks: links,
+                        ...postData,
                         images: imageUrls,
                         authorId: currentUser.uid,
                         authorName: userProfile.name || 'Unknown',
@@ -6389,22 +6507,21 @@
                         favoritedBy: [],
                         pendingEdit: null
                     });
-                    showToast(isAdmin ? 'Mod published! 🎉' : 'Submitted for review ✅', 'success')
+                    showToast(isAdmin ? 'Mod published! 🎉' : 'Submitted for review ✅', 'success');
                 }
                 resetCreateForm();
-                navTo('home')
+                navTo('home');
             } catch (err) {
                 console.error(err);
-                showToast('Submit failed: ' + err.message, 'error')
+                showToast('Submit failed: ' + err.message, 'error');
             } finally {
                 const eid = $('edit-post-id').value;
-                setBtnLoading('cr-btn', false, eid ? '<i class="fas fa-paper-plane"></i> Submit Edit' : '<i class="fas fa-paper-plane"></i> Submit for Review')
+                setBtnLoading('cr-btn', false, eid ? '<i class="fas fa-paper-plane"></i> Submit Edit' : '<i class="fas fa-paper-plane"></i> Submit for Review');
             }
         }
-
         /* ═══════════════════════════════════
-           ── MESSAGING ──
-        ═══════════════════════════════════ */
+             ── MESSAGING ──
+          ═══════════════════════════════════ */
         /* Chat ID = sorted UIDs joined by _ */
         function getChatId(uid1, uid2) {
             return [uid1, uid2].sort().join('_')
@@ -7069,12 +7186,37 @@
             }
         }
 
-        function admFilterUsers(q) {
-            const lq = q.toLowerCase().trim();
-            const filtered = lq ? admAllUsersCache.filter(u => (u.name || '').toLowerCase().includes(lq) || (u.email || '').toLowerCase().includes(lq)) : admAllUsersCache;
+        function admFilterAndSortUsers() {
+            const q = $('user-search-inp').value.toLowerCase().trim();
+            const sortType = $('adm-user-sort').value;
+
+            // ফিল্টার
+            let filtered = q ? admAllUsersCache.filter(u =>
+                (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
+            ) : [...admAllUsersCache];
+
+            // সর্টিং (সাজানো)
+            filtered.sort((a, b) => {
+                if (sortType === 'name-asc') {
+                    return (a.name || '').localeCompare(b.name || '');
+                } else if (sortType === 'role') {
+                    if (a.role === b.role) return 0;
+                    return a.role === 'admin' ? -1 : 1;
+                } else if (sortType === 'date-asc') {
+                    const tA = a.joinDate?.seconds || 0;
+                    const tB = b.joinDate?.seconds || 0;
+                    return tA - tB;
+                } else {
+                    const tA = a.joinDate?.seconds || 0;
+                    const tB = b.joinDate?.seconds || 0;
+                    return tB - tA;
+                }
+            });
+
             $('user-count').textContent = `${filtered.length} users`;
-            admRenderUserList(filtered)
+            admRenderUserList(filtered);
         }
+
 
         function admRenderUserList(users) {
             const el = $('users-content');
@@ -7131,18 +7273,29 @@
             if (!admEditUserId) return;
             setBtnLoading('user-modal-save', true);
             try {
+                // আগের ডেটা চেক করার জন্য
+                const oldUser = admAllUsersCache.find(x => x.id === admEditUserId);
                 const role = $('user-modal-role').value;
                 const badge = $('user-modal-badge').value;
                 const banned = $('user-modal-ban-toggle').classList.contains('on');
 
+                // কী কী পরিবর্তন হলো তা ডিটেক্ট করা
+                const roleChanged = oldUser && oldUser.role !== role;
+                const badgeChanged = oldUser && oldUser.badge !== badge;
+                const gotUnbanned = oldUser && (oldUser.banned === true && !banned);
+                const gotBanned = oldUser && (!oldUser.banned && banned);
+
+                // ১. ইউজারের প্রোফাইল আপডেট করা
                 await db.collection('users').doc(admEditUserId).update({
                     role,
                     badge,
                     banned
                 });
 
-                const bInfo = getBadge(role, badge);
+                // ২. ইউজারের পুরনো সব পোস্টে নতুন ব্যাচ আপডেট করা
+                const bInfo = getBadgeData(role, badge);
                 const postsSnap = await db.collection('posts').where('authorId', '==', admEditUserId).get();
+
                 if (!postsSnap.empty) {
                     const batch = db.batch();
                     postsSnap.forEach(doc => {
@@ -7150,11 +7303,12 @@
                             authorBadgeLabel: bInfo.label,
                             authorBadgeClass: bInfo.cls,
                             authorBadgeIcon: bInfo.icon
-                        })
+                        });
                     });
-                    await batch.commit()
+                    await batch.commit();
                 }
 
+                // ৩. লোকাল ক্যাশ আপডেট করা
                 const idx = admAllUsersCache.findIndex(x => x.id === admEditUserId);
                 if (idx > -1) admAllUsersCache[idx] = {
                     ...admAllUsersCache[idx],
@@ -7162,23 +7316,51 @@
                     badge,
                     banned
                 };
-                if (banned) {
+
+                const now = firebase.firestore.FieldValue.serverTimestamp();
+
+                // ৪. স্পেশাল পপ-আপ নোটিফিকেশন পাঠানো
+                if (gotBanned) {
                     await db.collection('notifications').add({
                         userId: admEditUserId,
                         title: '⚠️ Account Suspended',
                         message: 'Your account has been suspended. Please contact support.',
                         read: false,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        sentBy: currentUser.uid
-                    }).catch(() => {})
+                        createdAt: now,
+                        sentBy: currentAdmin.uid,
+                        isPopup: true
+                    }).catch(() => {});
+                } else if (gotUnbanned) {
+                    await db.collection('notifications').add({
+                        userId: admEditUserId,
+                        title: '🎉 Account Restored!',
+                        message: 'আপনার অ্যাকাউন্ট আনব্যান করা হয়েছে। আপনাকে আবার স্বাগতম!',
+                        read: false,
+                        createdAt: now,
+                        sentBy: currentAdmin.uid,
+                        isPopup: true
+                    }).catch(() => {});
                 }
+
+                if (roleChanged || badgeChanged) {
+                    await db.collection('notifications').add({
+                        userId: admEditUserId,
+                        title: '🎖️ Promotion!',
+                        message: `অভিনন্দন! আপনাকে ${bInfo.label} ব্যাচ দেওয়া হয়েছে।`,
+                        read: false,
+                        createdAt: now,
+                        sentBy: currentAdmin.uid,
+                        isPopup: true
+                    }).catch(() => {});
+                }
+
                 showToast('User updated ✅', 'success');
                 admCloseUserModal();
-                admRenderUserList(admAllUsersCache)
+                admRenderUserList(admAllUsersCache);
             } catch (e) {
-                showToast(e.message, 'error')
+                showToast(e.message, 'error');
             } finally {
-                setBtnLoading('user-modal-save', false, '<i class="fas fa-save"></i> Save Changes')
+                setBtnLoading('user-modal-save', false, '<i class="fas fa-save"></i> Save Changes');
             }
         }
 
