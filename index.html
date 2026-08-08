@@ -27,6 +27,14 @@
             -webkit-tap-highlight-color: transparent
         }
 
+        .hidden {
+            display: none !important
+        }
+
+        img {
+            max-width: 100%
+        }
+
         :root {
             --bg: #eef1f9;
             --bg2: #e2e7f4;
@@ -3311,6 +3319,531 @@
                 padding: 13px 5px
             }
         }
+
+        /* ═══════════════════════════════════
+           ADMIN PANEL (embedded)
+        ═══════════════════════════════════ */
+        #admin-view .page-hdr h2 {
+            display: flex;
+            align-items: center;
+            gap: 9px
+        }
+
+        .adm-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 16px;
+            border-radius: 50px;
+            background: var(--grd);
+            color: #fff;
+            border: none;
+            font-weight: 800;
+            font-size: 12px;
+            font-family: var(--fd);
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(18, 70, 214, .35);
+            transition: transform .18s;
+            flex-shrink: 0;
+            white-space: nowrap
+        }
+
+        .adm-switch-btn:active {
+            transform: scale(.93)
+        }
+
+        .adm-tab-row {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--nav);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            position: sticky;
+            top: calc(var(--nav-h) + 56px);
+            z-index: 49;
+            backdrop-filter: blur(24px)
+        }
+
+        .adm-tab-row::-webkit-scrollbar {
+            display: none
+        }
+
+        .adm-tab-btn {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 50px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border: 1.5px solid var(--border);
+            background: var(--bg2);
+            color: var(--t2);
+            cursor: pointer;
+            font-family: var(--fd);
+            transition: all .22s;
+            white-space: nowrap;
+            position: relative
+        }
+
+        .adm-tab-btn.active {
+            background: var(--grd);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(18, 70, 214, .35)
+        }
+
+        .adm-tab-badge {
+            min-width: 16px;
+            height: 16px;
+            background: #fff;
+            color: var(--accent);
+            font-size: 9.5px;
+            font-weight: 900;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px
+        }
+
+        .adm-sub {
+            display: none
+        }
+
+        .adm-sub.active {
+            display: block;
+            animation: fadeUp .3s cubic-bezier(.16, 1, .3, 1)
+        }
+
+        .adm-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 14px
+        }
+
+        @media(min-width:480px) {
+            .adm-stat-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        .adm-stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 14px;
+            box-shadow: var(--sh1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s
+        }
+
+        .adm-stat-card:active {
+            transform: scale(.96);
+            box-shadow: var(--sh2)
+        }
+
+        .adm-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            flex-shrink: 0
+        }
+
+        .adm-stat-val {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--t1);
+            font-family: var(--fd);
+            line-height: 1
+        }
+
+        .adm-stat-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--t3);
+            margin-top: 4px;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            font-family: var(--fd)
+        }
+
+        .adm-sec-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--t3);
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            padding: 14px 16px 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--fd)
+        }
+
+        .adm-sec-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border)
+        }
+
+        .adm-search-bar {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            background: var(--nav);
+            position: sticky;
+            top: calc(var(--nav-h) + 56px + 60px);
+            z-index: 45;
+            backdrop-filter: blur(24px)
+        }
+
+        .adm-search-bar .inp {
+            padding: 10px 14px;
+            font-size: 13.5px
+        }
+
+        .adm-user-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            transition: background .15s;
+            cursor: pointer
+        }
+
+        .adm-user-row:hover {
+            background: var(--bg2)
+        }
+
+        .adm-user-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .adm-user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--t1);
+            font-family: var(--fd);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 3px
+        }
+
+        .adm-user-meta {
+            font-size: 11.5px;
+            color: var(--t3);
+            font-weight: 500
+        }
+
+        .chip-ban {
+            background: var(--danger-light);
+            color: var(--danger)
+        }
+
+        .adm-post-row-wrap {
+            border-bottom: 1px solid var(--border)
+        }
+
+        .adm-post-row {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px
+        }
+
+        .adm-post-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--bg2);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .adm-post-row-body {
+            flex: 1;
+            min-width: 0
+        }
+
+        .adm-post-row-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--t1);
+            font-family: var(--fd);
+            margin-bottom: 3px
+        }
+
+        .adm-post-row-meta {
+            font-size: 11.5px;
+            color: var(--t3);
+            font-weight: 500;
+            margin-bottom: 5px
+        }
+
+        .adm-post-actions {
+            display: flex;
+            gap: 7px;
+            padding: 0 16px 14px;
+            flex-wrap: wrap
+        }
+
+        .adm-activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            transition: background .15s
+        }
+
+        .adm-activity-item:hover {
+            background: var(--bg2)
+        }
+
+        .adm-act-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px
+        }
+
+        .adm-notif-target-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px
+        }
+
+        .adm-notif-target-btn {
+            flex: 1;
+            padding: 11px 8px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--bg2);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--fd);
+            color: var(--t2);
+            transition: all .2s;
+            text-align: center
+        }
+
+        .adm-notif-target-btn.active {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent)
+        }
+
+        .adm-chat-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background .15s
+        }
+
+        .adm-chat-row:hover {
+            background: var(--bg2)
+        }
+
+        .adm-chat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+        .adm-chat-icon i {
+            font-size: 18px;
+            color: var(--accent)
+        }
+
+        .adm-toggle-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--bg2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            margin-bottom: 18px;
+            transition: border-color .2s
+        }
+
+        .adm-toggle-wrap:hover {
+            border-color: var(--accent)
+        }
+
+        .adm-toggle {
+            width: 48px;
+            height: 26px;
+            background: var(--border);
+            border-radius: 50px;
+            position: relative;
+            transition: background .2s;
+            flex-shrink: 0
+        }
+
+        .adm-toggle.on {
+            background: var(--success)
+        }
+
+        .adm-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .2s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .2)
+        }
+
+        .adm-toggle.on::after {
+            transform: translateX(22px)
+        }
+
+        .adm-msg-bubble {
+            padding: 9px 13px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            max-width: 82%;
+            word-break: break-word;
+            line-height: 1.5;
+            margin-bottom: 4px
+        }
+
+        .adm-msg-bubble.them {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--t1);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px
+        }
+
+        .adm-msg-time {
+            font-size: 10px;
+            color: var(--t3);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-family: var(--fd)
+        }
+
+        .adm-diff-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            margin-top: 8px;
+            font-size: 13px;
+            line-height: 1.6
+        }
+
+        .adm-diff-old {
+            color: var(--danger);
+            text-decoration: line-through;
+            background: rgba(220, 38, 38, .06);
+            padding: 2px 4px;
+            border-radius: 4px
+        }
+
+        .adm-diff-new {
+            color: var(--success);
+            background: rgba(5, 150, 105, .06);
+            padding: 2px 4px;
+            border-radius: 4px
+        }
+
+        .adm-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
+            gap: 16px;
+            text-align: center
+        }
+
+        /* ═══════════════════════════════════
+           CHAT — IMAGE MESSAGES
+        ═══════════════════════════════════ */
+        .chat-attach-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--bg2);
+            color: var(--accent);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform .15s, background .15s
+        }
+
+        .chat-attach-btn:active {
+            transform: scale(.88);
+            background: var(--accent-light)
+        }
+
+        .msg-bubble.has-img {
+            padding: 6px
+        }
+
+        .msg-img {
+            max-width: 230px;
+            max-height: 260px;
+            width: 100%;
+            border-radius: 14px;
+            display: block;
+            cursor: pointer;
+            object-fit: cover;
+            background: var(--bg2)
+        }
+
+        .msg-img-caption {
+            padding: 8px 6px 2px;
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        .msg-img-uploading {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            padding: 4px 2px;
+            font-weight: 600
+        }
     </style>
 </head>
 
@@ -3699,8 +4232,119 @@
                 </div>
                 <div class="chat-messages" id="chat-messages"></div>
                 <div class="chat-input-bar">
+                    <button class="chat-attach-btn" onclick="$('chat-img-inp').click()" title="Send photo"><i class="fas fa-image"></i></button>
+                    <input type="file" id="chat-img-inp" accept="image/*" class="hidden" onchange="handleChatImageSelect(this.files[0])">
                     <input class="chat-input" id="chat-inp" type="text" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()">
                     <button class="chat-send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- ── ADMIN PANEL (embedded) ── -->
+            <div id="admin-view" class="view">
+                <div class="page-hdr">
+                    <h2><i class="fas fa-shield-alt" style="color:var(--accent)"></i> Admin Panel</h2>
+                    <button class="adm-switch-btn" onclick="switchToUserPanel()"><i class="fas fa-user"></i> User Panel</button>
+                </div>
+                <div class="adm-tab-row no-sb">
+                    <button class="adm-tab-btn active" id="adm-nav-dashboard" onclick="adminNavTo('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+                    <button class="adm-tab-btn" id="adm-nav-posts" onclick="adminNavTo('posts')"><i class="fas fa-file-alt"></i> Posts <span id="adm-pending-badge" class="adm-tab-badge hidden">0</span></button>
+                    <button class="adm-tab-btn" id="adm-nav-users" onclick="adminNavTo('users')"><i class="fas fa-users"></i> Users</button>
+                    <button class="adm-tab-btn" id="adm-nav-notifications" onclick="adminNavTo('notifications')"><i class="fas fa-bell"></i> Notify</button>
+                    <button class="adm-tab-btn" id="adm-nav-messages" onclick="adminNavTo('messages')"><i class="fas fa-comments"></i> Chats</button>
+                </div>
+
+                <!-- Dashboard -->
+                <div id="adm-dashboard-view" class="adm-sub active">
+                    <div class="adm-stat-grid">
+                        <div class="adm-stat-card" onclick="adminNavTo('users')">
+                            <div class="adm-stat-icon" style="background:rgba(18,70,214,.12)">👥</div>
+                            <div><div class="adm-stat-val" id="ds-users">—</div><div class="adm-stat-lbl">Users</div></div>
+                        </div>
+                        <div class="adm-stat-card" onclick="adminNavTo('posts')">
+                            <div class="adm-stat-icon" style="background:rgba(5,150,105,.12)">📦</div>
+                            <div><div class="adm-stat-val" id="ds-posts">—</div><div class="adm-stat-lbl">Posts</div></div>
+                        </div>
+                        <div class="adm-stat-card" onclick="adminNavTo('posts')">
+                            <div class="adm-stat-icon" style="background:rgba(217,119,6,.12)">⏳</div>
+                            <div><div class="adm-stat-val" id="ds-pending" style="color:var(--warn)">—</div><div class="adm-stat-lbl">Pending</div></div>
+                        </div>
+                        <div class="adm-stat-card" onclick="adminNavTo('messages')">
+                            <div class="adm-stat-icon" style="background:rgba(8,145,178,.12)">💬</div>
+                            <div><div class="adm-stat-val" id="ds-chats">—</div><div class="adm-stat-lbl">Chats</div></div>
+                        </div>
+                    </div>
+                    <div class="adm-sec-title">Recent Posts</div>
+                    <div id="dash-activity"></div>
+                </div>
+
+                <!-- Posts -->
+                <div id="adm-posts-view" class="adm-sub">
+                    <div class="adm-tab-row no-sb" style="position:static;top:auto">
+                        <button class="adm-tab-btn active" data-pt="pending" onclick="admSetPostTab(this)">⏳ Pending</button>
+                        <button class="adm-tab-btn" data-pt="pending_edit" onclick="admSetPostTab(this)">✏️ Edit Requests</button>
+                        <button class="adm-tab-btn" data-pt="approved" onclick="admSetPostTab(this)">✅ Approved</button>
+                        <button class="adm-tab-btn" data-pt="all" onclick="admSetPostTab(this)">🗂 All</button>
+                    </div>
+                    <div id="posts-content"></div>
+                </div>
+
+                <!-- Users -->
+                <div id="adm-users-view" class="adm-sub">
+                    <div class="adm-search-bar" style="display:flex;align-items:center;gap:10px">
+                        <input type="search" class="inp" id="user-search-inp" placeholder="Search by name or email…" oninput="admFilterUsers(this.value)" style="flex:1">
+                        <span id="user-count" style="font-size:12px;color:var(--t3);font-weight:700;flex-shrink:0"></span>
+                    </div>
+                    <div id="users-content"></div>
+                </div>
+
+                <!-- Notifications -->
+                <div id="adm-notifications-view" class="adm-sub">
+                    <div style="padding:16px">
+                        <div class="card" style="padding:18px;margin-bottom:14px">
+                            <div style="font-size:15px;font-weight:800;color:var(--t1);font-family:var(--fd);margin-bottom:14px"><i class="fas fa-paper-plane" style="color:var(--accent)"></i> Compose Notification</div>
+                            <div class="form-row">
+                                <label class="fl">Send To</label>
+                                <div class="adm-notif-target-row">
+                                    <button class="adm-notif-target-btn active" id="notif-all-btn" onclick="admSetNotifTarget('all',this)"><i class="fas fa-users"></i> Everyone</button>
+                                    <button class="adm-notif-target-btn" id="notif-user-btn" onclick="admSetNotifTarget('user',this)"><i class="fas fa-user"></i> Specific User</button>
+                                </div>
+                                <div id="notif-user-picker" style="display:none;margin-top:8px">
+                                    <input type="text" class="inp" id="notif-search-inp" placeholder="Search user name…" oninput="admSearchNotifUser(this.value)" style="margin-bottom:8px">
+                                    <div id="notif-user-results" style="max-height:200px;overflow-y:auto;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--border)"></div>
+                                    <div id="notif-selected" style="display:none;margin-top:8px;padding:10px 14px;background:var(--accent-light);border:1px solid rgba(18,70,214,.2);border-radius:var(--radius-sm);font-size:13px;font-weight:700;color:var(--accent)"></div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label class="fl">Title</label>
+                                <input type="text" class="inp" id="notif-title" placeholder="e.g. New Feature Available! 🎉">
+                            </div>
+                            <div class="form-row">
+                                <label class="fl">Message</label>
+                                <textarea class="inp" id="notif-msg" placeholder="Write your notification message…" rows="4"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <label class="fl">Button Text (Optional)</label>
+                                <input type="text" class="inp" id="notif-btn-text" placeholder="e.g. Update Now">
+                            </div>
+                            <div class="form-row">
+                                <label class="fl">Button Link (Optional)</label>
+                                <input type="url" class="inp" id="notif-btn-link" placeholder="https://example.com">
+                            </div>
+                            <button id="notif-send-btn" class="btn btn-primary btn-full" onclick="admSendNotification()">
+                                <i class="fas fa-paper-plane"></i> Send Notification
+                            </button>
+                        </div>
+                        <div class="adm-sec-title" style="padding:0 0 10px">Recent Notifications Sent</div>
+                        <div id="notif-history"></div>
+                    </div>
+                </div>
+
+                <!-- Messages Monitor -->
+                <div id="adm-messages-view" class="adm-sub">
+                    <div style="display:flex;justify-content:flex-end;padding:12px 16px 0">
+                        <button class="btn btn-ghost btn-sm" onclick="admLoadAllChats()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                    <div id="msg-content"></div>
                 </div>
             </div>
 
@@ -3812,6 +4456,107 @@
         </div>
     </div>
 
+    <!-- ══ ADMIN: USER EDIT MODAL ══ -->
+    <div id="user-modal" class="modal-backdrop hidden">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+                <img id="user-modal-photo" class="avatar" style="width:52px;height:52px;border:2px solid var(--border)" src="" data-name="">
+                <div>
+                    <div id="user-modal-name" style="font-size:17px;font-weight:800;color:var(--t1);font-family:var(--fd);margin-bottom:2px">User</div>
+                    <div style="font-size:12px;color:var(--t3);font-weight:500" id="user-modal-email"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="fl">Role</label>
+                <select id="user-modal-role" class="inp">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label class="fl">Badge</label>
+                <select id="user-modal-badge" class="inp">
+                    <option value="newbie">⭐ Newbie</option>
+                    <option value="rookie">🔥 Rookie</option>
+                    <option value="regular">✅ Regular</option>
+                    <option value="veteran">🏅 Veteran</option>
+                    <option value="legend">👑 Legend</option>
+                    <option value="admin">🛡️ Admin</option>
+                </select>
+            </div>
+            <div class="adm-toggle-wrap" onclick="admToggleBanToggle()">
+                <div class="adm-toggle" id="user-modal-ban-toggle"></div>
+                <div>
+                    <div style="font-size:13.5px;font-weight:700;color:var(--t1)">Ban this user</div>
+                    <div style="font-size:12px;color:var(--t3)">Banned users cannot log in or post</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-ghost" style="flex:1" onclick="admCloseUserModal()"><i class="fas fa-times"></i> Cancel</button>
+                <button class="btn btn-primary" style="flex:1" id="user-modal-save" onclick="admSaveUserChanges()"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ADMIN: POST EDIT MODAL ══ -->
+    <div id="post-modal" class="modal-backdrop hidden">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div style="font-size:19px;font-weight:800;margin-bottom:14px;color:var(--t1);font-family:var(--fd)">Edit Post</div>
+            <input type="hidden" id="pm-post-id">
+            <div class="form-row">
+                <label class="fl">Title</label>
+                <input type="text" class="inp" id="pm-title" maxlength="100" placeholder="Post title">
+            </div>
+            <div class="form-row">
+                <label class="fl">Category</label>
+                <select class="inp" id="pm-cat">
+                    <option value="Skins">🎨 Skins</option>
+                    <option value="Car Mods">🚗 Car Mods</option>
+                    <option value="Road Mods">🛣️ Road Mods</option>
+                    <option value="Templates">📄 Templates</option>
+                    <option value="Codenames">🔤 Codenames</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label class="fl">Description</label>
+                <textarea class="inp" id="pm-desc" rows="5" placeholder="Post description"></textarea>
+            </div>
+            <div class="form-row">
+                <label class="fl">Status</label>
+                <select class="inp" id="pm-status">
+                    <option value="pending">⏳ Pending</option>
+                    <option value="approved">✅ Approved</option>
+                    <option value="rejected">❌ Rejected</option>
+                </select>
+            </div>
+            <div id="pm-edit-diff" style="display:none">
+                <div class="adm-sec-title" style="padding:0 0 10px">⚠️ Pending Edit Request</div>
+                <div id="pm-diff-content"></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:6px">
+                <button class="btn btn-ghost" style="flex:1" onclick="admClosePostModal()"><i class="fas fa-times"></i> Cancel</button>
+                <button class="btn btn-primary" style="flex:1" id="pm-save" onclick="admSavePostChanges()"><i class="fas fa-save"></i> Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ADMIN: CHAT MONITOR MODAL ══ -->
+    <div id="chat-modal" class="modal-backdrop hidden">
+        <div class="modal-sheet" style="display:flex;flex-direction:column;max-height:88vh">
+            <div class="modal-handle"></div>
+            <div style="font-size:15px;font-weight:800;font-family:var(--fd);color:var(--t1);margin-bottom:4px" id="chat-modal-title">Conversation</div>
+            <div style="font-size:12px;color:var(--t3);margin-bottom:14px" id="chat-modal-sub"></div>
+            <div id="chat-modal-messages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:200px;max-height:50vh;padding:4px 0"></div>
+            <div style="display:flex;gap:10px;margin-top:14px;flex-shrink:0">
+                <button class="btn btn-ghost" style="flex:1" onclick="admCloseChatModal()"><i class="fas fa-times"></i> Close</button>
+                <button class="btn btn-danger btn-sm" id="delete-chat-btn" onclick="admDeleteChatFromModal()"><i class="fas fa-trash"></i> Delete Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
         /* ═══════════════════════════════════
            FIREBASE CONFIG 
         ═══════════════════════════════════ */
@@ -3880,6 +4625,7 @@
         let unsubNotif = null,
             unsubChat = null,
             viewHistory = [],
+            scrollMemory = {},
             currentCat = 'All',
             lbType = 'weekly';
         let searchTimer = null,
@@ -3971,6 +4717,15 @@
         function onImgError(img) {
             img.onerror = null;
             img.src = makeAvatar(img.dataset.name || '?')
+        }
+
+        function escapeHTML(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
         }
 
                 function getBadge(role, badgeStr) {
@@ -4284,22 +5039,34 @@
                 if ($('search-inp').value) $('recent-searches-section').style.display = 'none'
             }, 120),
             'edit-profile': openEditProfileForm,
-            myposts: loadMyPosts
+            myposts: loadMyPosts,
+            admin: loadAdminEntry
         };
 
-        function navTo(name) {
+        /* Restore a view's remembered scroll position (or top if none saved) */
+        function restoreScrollFor(name) {
+            const y = scrollMemory[name];
+            requestAnimationFrame(() => {
+                window.scrollTo(0, typeof y === 'number' ? y : 0)
+            })
+        }
+
+        async function navTo(name) {
             const prev = viewHistory[viewHistory.length - 1];
+            if (prev) scrollMemory[prev] = window.scrollY;
             if (prev !== name) viewHistory.push(name);
             if (name === 'create' && !$('edit-post-id').value) resetCreateForm();
             _showView(name);
-            if (LOADERS[name]) LOADERS[name]();
+            if (LOADERS[name]) await LOADERS[name]();
+            requestAnimationFrame(() => window.scrollTo(0, 0));
         }
 
-        function goBack() {
+        async function goBack() {
             viewHistory.pop();
             const prev = viewHistory[viewHistory.length - 1] || 'home';
             _showView(prev);
-            if (LOADERS[prev]) LOADERS[prev]()
+            if (LOADERS[prev]) await LOADERS[prev]();
+            restoreScrollFor(prev);
         }
 
         function _showView(name) {
@@ -4309,14 +5076,13 @@
                 chatEl.style.display = 'none';
                 chatEl.classList.remove('active')
             }
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('#main > .view').forEach(v => v.classList.remove('active'));
             const el = $(`${name}-view`);
             if (el) el.classList.add('active');
             NAV_TABS.forEach(t => {
                 const btn = $(`nav-${t}`);
                 if (btn) btn.classList.toggle('active', t === name)
             });
-            window.scrollTo(0, 0);
             // update bottom nav for favorites (not in tabs list for bottom)
             const favBtn = $('nav-favorites');
             /* no nav-favorites in new nav, removed to fit messages */
@@ -4788,7 +5554,7 @@
             }
         }
 
-        /* ═══════════════════════════════════
+            /* ═══════════════════════════════════
            NOTIFICATIONS
         ═══════════════════════════════════ */
         async function loadNotifications() {
@@ -4822,7 +5588,22 @@
                     };
                     const ic = im[n.type] || 'fa-bell';
                     const co = cm[n.type] || 'var(--accent)';
-                    html += `<div class="notif-item ${n.read?'':'unread'}" onclick="markOneRead('${n.id}')"><div class="notif-icon" style="color:${co}"><i class="fas ${ic}"></i></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:800;color:var(--t1);margin-bottom:3px;font-family:var(--fd)">${n.title||'Notification'}</div><div style="font-size:13px;color:var(--t2);line-height:1.55;font-weight:400">${n.message||''}</div><div style="font-size:11px;color:var(--t3);margin-top:5px;font-weight:600">${timeAgo(n.createdAt)}</div></div>${!n.read?'<div class="notif-dot"></div>':''}</div>`
+                    
+                    // 🔔 নতুন যুক্ত করা হলো: বাটন থাকলে সেটি লিস্টে শো করানোর কোড
+                    const actionButton = (n.btnText && n.btnLink) 
+                        ? `<a href="${n.btnLink}" target="_blank" onclick="event.stopPropagation()" class="btn btn-primary btn-sm" style="margin-top:8px; padding:6px 14px; font-size:11.5px; text-decoration:none;"><i class="fas fa-link"></i> ${n.btnText}</a>` 
+                        : '';
+
+                    html += `<div class="notif-item ${n.read?'':'unread'}" onclick="markOneRead('${n.id}')">
+                        <div class="notif-icon" style="color:${co}"><i class="fas ${ic}"></i></div>
+                        <div style="flex:1;min-width:0">
+                            <div style="font-size:14px;font-weight:800;color:var(--t1);margin-bottom:3px;font-family:var(--fd)">${escapeHTML(n.title||'Notification')}</div>
+                            <div style="font-size:13px;color:var(--t2);line-height:1.55;font-weight:400">${escapeHTML(n.message||'')}</div>
+                            ${actionButton}
+                            <div style="font-size:11px;color:var(--t3);margin-top:5px;font-weight:600">${timeAgo(n.createdAt)}</div>
+                        </div>
+                        ${!n.read?'<div class="notif-dot"></div>':''}
+                    </div>`
                 });
                 list.innerHTML = html;
                 const dot = $('notif-dot');
@@ -4832,31 +5613,45 @@
                 list.innerHTML = `<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3></div>`
             }
         }
-        async function markAllRead() {
+
+        async function markOneRead(id) {
             try {
-                const snap = await db.collection('notifications').where('userId', '==', currentUser.uid).where('read', '==', false).get();
-                if (snap.empty) {
-                    showToast('No unread notifications', 'info');
-                    return
-                }
-                const b = db.batch();
-                snap.forEach(d => b.update(d.ref, {
-                    read: true
-                }));
-                await b.commit();
-                showToast('All marked as read ✅', 'success');
-                loadNotifications()
-            } catch (e) {
-                showToast('Failed', 'error')
-            }
-        }
-        async function markOneRead(nid) {
-            try {
-                await db.collection('notifications').doc(nid).update({
+                await db.collection('notifications').doc(id).update({
                     read: true
                 });
-                loadNotifications()
-            } catch (_) {}
+                const el = document.querySelector(`.notif-item[onclick="markOneRead('${id}')"]`);
+                if (el) {
+                    el.classList.remove('unread');
+                    const dot = el.querySelector('.notif-dot');
+                    if (dot) dot.remove()
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
+        async function markAllRead() {
+            if (!currentUser) return;
+            try {
+                const snap = await db.collection('notifications').where('userId', '==', currentUser.uid).where('read', '==', false).get();
+                if (snap.empty) return;
+                const batch = db.batch();
+                snap.forEach(d => batch.update(d.ref, {
+                    read: true
+                }));
+                await batch.commit();
+                document.querySelectorAll('.notif-item.unread').forEach(el => {
+                    el.classList.remove('unread');
+                    const dot = el.querySelector('.notif-dot');
+                    if (dot) dot.remove()
+                });
+                const badge = $('notif-dot');
+                if (badge) badge.classList.remove('visible');
+                showToast('All notifications marked as read', 'success')
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to mark as read', 'error')
+            }
         }
 
         /* ═══════════════════════════════════
@@ -5113,7 +5908,7 @@
   <a href="https://forms.gle/RuQApQyALr5CEKXK7" target="_blank" rel="noopener" class="btn btn-ghost btn-full" style="text-decoration:none;color:var(--accent);border-color:rgba(18,70,214,.3);position:relative;overflow:hidden">
     <i class="fas fa-shield-alt"></i> I Want to Be an Admin
   </a>
-  ${isAdmin?`<a href="admin.html" target="_blank" rel="noopener" class="btn btn-ghost btn-full" style="text-decoration:none;color:var(--accent);border-color:rgba(18,70,214,.3)"><i class="fas fa-shield-alt"></i> Admin Panel</a>`:''}
+  ${isAdmin?`<button onclick="openAdminPanel()" class="btn btn-ghost btn-full" style="color:var(--accent);border-color:rgba(18,70,214,.3)"><i class="fas fa-shield-alt"></i> Admin Panel</button>`:''}
   <button onclick="window.open('https://t.me/annonymous707','_blank')" class="btn btn-ghost btn-full"><i class="fab fa-telegram" style="color:#0088cc"></i> Contact Developer</button>
   <button onclick="doLogout()" class="btn btn-full" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
 </div>
@@ -5217,8 +6012,11 @@
            MY POSTS
         ═══════════════════════════════════ */
         async function loadMyPosts() {
+            const prevV = viewHistory[viewHistory.length - 1];
+            if (prevV) scrollMemory[prevV] = window.scrollY;
             _showView('myposts');
             if (viewHistory[viewHistory.length - 1] !== 'myposts') viewHistory.push('myposts');
+            requestAnimationFrame(() => window.scrollTo(0, 0));
             const el = $('mp-content');
             el.innerHTML = loadingHTML();
             try {
@@ -5723,7 +6521,9 @@
                     };
                     const isMe = m.senderId === currentUser.uid;
                     const time = timeAgo(m.createdAt);
-                    msgsEl.innerHTML += `<div class="msg-bubble-wrap ${isMe?'me':''}"><img src="${isMe?'':(currentChatOther.photo||makeAvatar(currentChatOther.name))}" class="avatar msg-avatar ${isMe?'hidden':''}" data-name="${currentChatOther.name}" onerror="onImgError(this)" style="${isMe?'display:none':''}"><div class="msg-bubble ${isMe?'me':'them'}">${m.text}<span class="msg-time ${isMe?'me':''}">${time}</span></div></div>`
+                    const imgHTML = m.imageUrl ? `<img src="${m.imageUrl}" class="msg-img" loading="lazy" onerror="onImgError(this)" onclick="openLightbox('${m.imageUrl}',['${m.imageUrl}'])">` : '';
+                    const textHTML = m.text ? `<div class="${m.imageUrl?'msg-img-caption':''}">${escapeHTML(m.text)}</div>` : '';
+                    msgsEl.innerHTML += `<div class="msg-bubble-wrap ${isMe?'me':''}"><img src="${isMe?'':(currentChatOther.photo||makeAvatar(currentChatOther.name))}" class="avatar msg-avatar ${isMe?'hidden':''}" data-name="${currentChatOther.name}" onerror="onImgError(this)" style="${isMe?'display:none':''}"><div class="msg-bubble ${isMe?'me':'them'} ${m.imageUrl?'has-img':''}">${imgHTML}${textHTML}<span class="msg-time ${isMe?'me':''}">${time}</span></div></div>`
                 });
                 msgsEl.scrollTop = msgsEl.scrollHeight;
             }, err => console.warn(err));
@@ -5755,6 +6555,52 @@
             }
         }
 
+        async function handleChatImageSelect(file) {
+            const inp = $('chat-img-inp');
+            if (!file || !currentChatId) {
+                if (inp) inp.value = '';
+                return
+            }
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select an image file', 'warn');
+                if (inp) inp.value = '';
+                return
+            }
+            if (file.size > 8 * 1024 * 1024) {
+                showToast('Image is too large (max 8MB)', 'warn');
+                if (inp) inp.value = '';
+                return
+            }
+            if (inp) inp.value = '';
+            const msgsEl = $('chat-messages');
+            const tempId = 'chat-upload-' + Date.now();
+            msgsEl.insertAdjacentHTML('beforeend', `<div class="msg-bubble-wrap me" id="${tempId}"><div class="msg-bubble me"><div class="msg-img-uploading"><div class="spin spin-sm"></div> Sending photo…</div></div></div>`);
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+            try {
+                const url = await uploadToImgBB(file);
+                const chatRef = db.collection('chats').doc(currentChatId);
+                await chatRef.collection('messages').add({
+                    text: '',
+                    imageUrl: url,
+                    senderId: currentUser.uid,
+                    senderName: userProfile?.name || '',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                await chatRef.update({
+                    lastMessage: '📷 Photo',
+                    lastSenderId: currentUser.uid,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    [`unread.${currentChatOther?.id}`]: true
+                });
+            } catch (e) {
+                showToast('Failed to send photo', 'error');
+                console.error(e)
+            } finally {
+                const t = $(tempId);
+                if (t) t.remove()
+            }
+        }
+
         function closeChat() {
             if (unsubChat) {
                 unsubChat();
@@ -5768,7 +6614,7 @@
             const prev = viewHistory[viewHistory.length - 1] || 'messages';
             viewHistory = viewHistory.filter(v => v !== 'chat');
             _showView(prev);
-            if (LOADERS[prev]) LOADERS[prev]();
+            Promise.resolve(LOADERS[prev] ? LOADERS[prev]() : null).then(() => restoreScrollFor(prev));
         }
 
         /* New message — load ALL users, search filters locally */
@@ -5828,6 +6674,785 @@
             _renderUserPicker(filtered);
         }
 
+        /* ═══════════════════════════════════════════════════
+           ADMIN PANEL (embedded — reuses main app auth/db)
+        ═══════════════════════════════════════════════════ */
+        let admPostTab = 'pending',
+            admNotifTarget = 'all',
+            admNotifTargetUserId = null,
+            admNotifTargetUserName = '';
+        let admAllUsersCache = [],
+            admAllUsersFetched = false;
+        let admEditUserId = null,
+            admChatModalId = null,
+            admCurrentSub = 'dashboard';
+
+        const ADMIN_LOADERS = {
+            dashboard: admLoadDashboard,
+            posts: admLoadPosts,
+            users: admLoadUsersView,
+            notifications: admLoadNotifHistory,
+            messages: admLoadAllChats
+        };
+
+        function openAdminPanel() {
+            const isAdmin = userProfile && (userProfile.role === 'admin' || userProfile.badge === 'admin');
+            if (!isAdmin) {
+                showToast('Access denied — admin only', 'error');
+                return
+            }
+            navTo('admin')
+        }
+
+        function switchToUserPanel() {
+            navTo('home')
+        }
+
+        function loadAdminEntry() {
+            adminNavTo(admCurrentSub || 'dashboard');
+            admLoadPendingBadge()
+        }
+
+        function adminNavTo(name) {
+            admCurrentSub = name;
+            document.querySelectorAll('#admin-view .adm-sub').forEach(v => v.classList.remove('active'));
+            const el = $(`adm-${name}-view`);
+            if (el) el.classList.add('active');
+            ['dashboard', 'posts', 'users', 'notifications', 'messages'].forEach(t => {
+                const b = $(`adm-nav-${t}`);
+                if (b) b.classList.toggle('active', t === name)
+            });
+            window.scrollTo(0, 0);
+            if (ADMIN_LOADERS[name]) ADMIN_LOADERS[name]()
+        }
+
+        /* ── PENDING BADGE COUNT ── */
+        async function admLoadPendingBadge() {
+            try {
+                const snap = await db.collection('posts').where('status', '==', 'pending').get();
+                const badge = $('adm-pending-badge');
+                if (!badge) return;
+                if (snap.size > 0) {
+                    badge.textContent = snap.size;
+                    badge.classList.remove('hidden')
+                } else badge.classList.add('hidden')
+            } catch (_) {}
+        }
+
+        /* ── DASHBOARD ── */
+        async function admLoadDashboard() {
+            const el = $('dash-activity');
+            el.innerHTML = loadingHTML('Loading dashboard…');
+            try {
+                const [usersSnap, postsSnap, pendSnap, chatsSnap] = await Promise.all([
+                    db.collection('users').get(),
+                    db.collection('posts').get(),
+                    db.collection('posts').where('status', '==', 'pending').get(),
+                    db.collection('chats').get()
+                ]);
+                $('ds-users').textContent = usersSnap.size;
+                $('ds-posts').textContent = postsSnap.size;
+                $('ds-pending').textContent = pendSnap.size;
+                $('ds-chats').textContent = chatsSnap.size;
+                const badge = $('adm-pending-badge');
+                if (badge) {
+                    if (pendSnap.size > 0) {
+                        badge.textContent = pendSnap.size;
+                        badge.classList.remove('hidden')
+                    } else badge.classList.add('hidden')
+                }
+                const recentSnap = await db.collection('posts').orderBy('createdAt', 'desc').limit(15).get();
+                let html = '';
+                recentSnap.forEach(d => {
+                    const p = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    const dotColor = {
+                        approved: 'var(--success)',
+                        pending: 'var(--warn)',
+                        rejected: 'var(--danger)'
+                    } [p.status] || 'var(--t3)';
+                    const chipClass = {
+                        approved: 'chip-ok',
+                        pending: 'chip-pend',
+                        rejected: 'chip-rej'
+                    } [p.status] || 'chip-pend';
+                    html += `<div class="adm-activity-item">
+            <div class="adm-act-dot" style="background:${dotColor}"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:700;color:var(--t1);font-family:var(--fd);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${escapeHTML(p.title||'Untitled')}</div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span>by ${escapeHTML(p.authorName||'Unknown')}</span>
+                <span>·</span><span>${escapeHTML(p.category||'')}</span>
+                <span>·</span><span>${timeAgo(p.createdAt)}</span>
+                <span class="chip ${chipClass}">${p.status}</span>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="admOpenPostEdit('${d.id}')"><i class="fas fa-edit"></i></button>
+          </div>`
+                });
+                el.innerHTML = html || '<div class="empty" style="padding:32px 0"><div class="empty-icon"><i class="fas fa-inbox"></i></div><p>No posts yet</p></div>'
+            } catch (e) {
+                el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`;
+                console.error(e)
+            }
+        }
+
+        /* ── POSTS ── */
+        function admSetPostTab(btn) {
+            btn.closest('.adm-tab-row').querySelectorAll('.adm-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            admPostTab = btn.dataset.pt;
+            admLoadPosts()
+        }
+
+        async function admLoadPosts() {
+            const el = $('posts-content');
+            el.innerHTML = loadingHTML('Loading posts…');
+            try {
+                let q;
+                if (admPostTab === 'pending') {
+                    q = db.collection('posts').where('status', '==', 'pending').orderBy('createdAt', 'desc').limit(50)
+                } else if (admPostTab === 'approved') {
+                    q = db.collection('posts').where('status', '==', 'approved').orderBy('createdAt', 'desc').limit(50)
+                } else if (admPostTab === 'pending_edit') {
+                    q = db.collection('posts').where('pendingEdit', '!=', null).limit(50)
+                } else {
+                    q = db.collection('posts').orderBy('createdAt', 'desc').limit(60)
+                }
+                const snap = await q.get();
+                if (snap.empty) {
+                    el.innerHTML = '<div class="empty"><div class="empty-icon"><i class="fas fa-inbox"></i></div><h3>Nothing here</h3><p>No posts in this category</p></div>';
+                    return
+                }
+                let html = '';
+                snap.forEach(d => {
+                    const p = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    const img = p.images && p.images[0] ? p.images[0] : '';
+                    const chipCls = {
+                        approved: 'chip-ok',
+                        pending: 'chip-pend',
+                        rejected: 'chip-rej'
+                    } [p.status] || 'chip-pend';
+                    html += `<div class="adm-post-row-wrap">
+            <div class="adm-post-row">
+              ${img?`<img src="${img}" class="adm-post-thumb" onerror="this.onerror=null;this.src=makeAvatar('?')">`:`<div class="adm-post-thumb"><i class="fas fa-image" style="font-size:22px;color:var(--t3)"></i></div>`}
+              <div class="adm-post-row-body">
+                <div class="adm-post-row-title c2">${escapeHTML(p.title||'Untitled')}</div>
+                <div class="adm-post-row-meta">
+                  <span style="font-weight:700;color:var(--t2)">${escapeHTML(p.authorName||'Unknown')}</span>
+                  · ${escapeHTML(p.category||'—')} · ${timeAgo(p.createdAt)}
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  <span class="chip ${chipCls}"><i class="fas fa-circle" style="font-size:7px"></i> ${p.status}</span>
+                  ${p.pendingEdit?'<span class="chip chip-edit"><i class="fas fa-pen"></i> Edit Pending</span>':''}
+                  <span style="font-size:11px;color:var(--t3);font-weight:600"><i class="fas fa-eye"></i> ${p.views||0}
+                  <i class="fas fa-heart" style="margin-left:6px;color:var(--danger)"></i> ${p.likes||0}
+                  <i class="fas fa-download" style="margin-left:6px;color:var(--accent)"></i> ${p.downloads||0}</span>
+                </div>
+              </div>
+            </div>
+            <div class="adm-post-actions">
+              ${p.status==='pending'?`
+                <button class="btn btn-success btn-sm" onclick="admApprovePost('${d.id}')"><i class="fas fa-check"></i> Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="admRejectPost('${d.id}')"><i class="fas fa-times"></i> Reject</button>
+              `:''}
+              ${p.pendingEdit?`
+                <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2)" onclick="admApproveEdit('${d.id}')"><i class="fas fa-check-double"></i> Approve Edit</button>
+                <button class="btn btn-ghost btn-sm" onclick="admRejectEdit('${d.id}')"><i class="fas fa-times"></i> Reject Edit</button>
+              `:''}
+              <button class="btn btn-ghost btn-sm" onclick="admOpenPostEdit('${d.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)" onclick="admDeletePost('${d.id}')"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>`
+                });
+                el.innerHTML = html
+            } catch (e) {
+                el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`;
+                console.error(e)
+            }
+        }
+
+        async function admApprovePost(id) {
+            try {
+                await db.collection('posts').doc(id).update({
+                    status: 'approved',
+                    approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    approvedBy: currentUser.uid
+                });
+                const doc = await db.collection('posts').doc(id).get();
+                if (doc.exists && doc.data().authorId) {
+                    await db.collection('notifications').add({
+                        userId: doc.data().authorId,
+                        title: '🎉 Post Approved!',
+                        message: `Your post "${doc.data().title||'your post'}" has been approved and is now live!`,
+                        read: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        sentBy: currentUser.uid
+                    }).catch(() => {})
+                }
+                showToast('Post approved ✅', 'success');
+                admLoadPosts();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admRejectPost(id) {
+            try {
+                await db.collection('posts').doc(id).update({
+                    status: 'rejected'
+                });
+                const doc = await db.collection('posts').doc(id).get();
+                if (doc.exists && doc.data().authorId) {
+                    await db.collection('notifications').add({
+                        userId: doc.data().authorId,
+                        title: 'Post Not Approved',
+                        message: `Your post "${doc.data().title||'your post'}" was not approved. Please review and resubmit.`,
+                        read: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        sentBy: currentUser.uid
+                    }).catch(() => {})
+                }
+                showToast('Post rejected', 'warn');
+                admLoadPosts();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admApproveEdit(id) {
+            try {
+                const doc = await db.collection('posts').doc(id).get();
+                if (!doc.exists) return;
+                const edit = doc.data().pendingEdit;
+                if (!edit) {
+                    showToast('No pending edit found', 'warn');
+                    return
+                }
+                await db.collection('posts').doc(id).update({
+                    title: edit.title,
+                    category: edit.category,
+                    description: edit.description,
+                    downloadLinks: edit.downloadLinks || [],
+                    images: edit.images || [],
+                    pendingEdit: firebase.firestore.FieldValue.delete(),
+                    status: 'approved',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('Edit approved ✅', 'success');
+                admLoadPosts()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admRejectEdit(id) {
+            try {
+                await db.collection('posts').doc(id).update({
+                    pendingEdit: firebase.firestore.FieldValue.delete()
+                });
+                showToast('Edit rejected', 'warn');
+                admLoadPosts()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admDeletePost(id) {
+            const ok = await confirmDialog('Delete Post', 'Delete this post permanently? This cannot be undone.');
+            if (!ok) return;
+            try {
+                await db.collection('posts').doc(id).delete();
+                showToast('Post deleted', 'success');
+                admLoadPosts();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admOpenPostEdit(id) {
+            try {
+                const doc = await db.collection('posts').doc(id).get();
+                if (!doc.exists) {
+                    showToast('Post not found', 'error');
+                    return
+                }
+                const p = {
+                    id: doc.id,
+                    ...doc.data()
+                };
+                $('pm-post-id').value = id;
+                $('pm-title').value = p.title || '';
+                $('pm-cat').value = p.category || 'Skins';
+                $('pm-desc').value = p.description || '';
+                $('pm-status').value = p.status || 'pending';
+                if (p.pendingEdit) {
+                    const diff = $('pm-diff-content');
+                    diff.innerHTML = `
+            <div class="adm-diff-box">
+              <div style="font-size:12px;font-weight:800;color:var(--t3);margin-bottom:8px;font-family:var(--fd)">TITLE</div>
+              <div><span class="adm-diff-old">${escapeHTML(p.title||'')}</span> → <span class="adm-diff-new">${escapeHTML(p.pendingEdit.title||'')}</span></div>
+              <div style="font-size:12px;font-weight:800;color:var(--t3);margin:10px 0 6px;font-family:var(--fd)">DESCRIPTION (first 200 chars)</div>
+              <div style="font-size:12.5px"><span class="adm-diff-old">${escapeHTML((p.description||'').substring(0,200))}</span></div>
+              <div style="font-size:12.5px;margin-top:5px"><span class="adm-diff-new">${escapeHTML((p.pendingEdit.description||'').substring(0,200))}</span></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="btn btn-success btn-sm" style="flex:1" onclick="admApproveEdit('${id}');admClosePostModal()"><i class="fas fa-check"></i> Approve Edit</button>
+              <button class="btn btn-ghost btn-sm" style="flex:1" onclick="admRejectEdit('${id}');admClosePostModal()"><i class="fas fa-times"></i> Reject Edit</button>
+            </div>`;
+                    $('pm-edit-diff').style.display = 'block'
+                } else {
+                    $('pm-edit-diff').style.display = 'none'
+                }
+                $('post-modal').classList.remove('hidden')
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        function admClosePostModal() {
+            $('post-modal').classList.add('hidden');
+            $('pm-post-id').value = ''
+        }
+
+        async function admSavePostChanges() {
+            const id = $('pm-post-id').value;
+            if (!id) return;
+            setBtnLoading('pm-save', true);
+            try {
+                await db.collection('posts').doc(id).update({
+                    title: $('pm-title').value.trim(),
+                    category: $('pm-cat').value,
+                    description: $('pm-desc').value.trim(),
+                    status: $('pm-status').value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('Post updated ✅', 'success');
+                admClosePostModal();
+                admLoadPosts();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            } finally {
+                setBtnLoading('pm-save', false, '<i class="fas fa-save"></i> Save')
+            }
+        }
+
+        /* ── USERS ── */
+        async function admLoadUsersView() {
+            if (admAllUsersFetched && admAllUsersCache.length) {
+                admRenderUserList(admAllUsersCache);
+                return
+            }
+            const el = $('users-content');
+            el.innerHTML = loadingHTML('Loading users…');
+            try {
+                const snap = await db.collection('users').orderBy('name').get();
+                admAllUsersCache = [];
+                snap.forEach(d => admAllUsersCache.push({
+                    id: d.id,
+                    ...d.data()
+                }));
+                admAllUsersFetched = true;
+                $('user-count').textContent = `${admAllUsersCache.length} users`;
+                admRenderUserList(admAllUsersCache)
+            } catch (e) {
+                el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`
+            }
+        }
+
+        function admFilterUsers(q) {
+            const lq = q.toLowerCase().trim();
+            const filtered = lq ? admAllUsersCache.filter(u => (u.name || '').toLowerCase().includes(lq) || (u.email || '').toLowerCase().includes(lq)) : admAllUsersCache;
+            $('user-count').textContent = `${filtered.length} users`;
+            admRenderUserList(filtered)
+        }
+
+        function admRenderUserList(users) {
+            const el = $('users-content');
+            if (!users.length) {
+                el.innerHTML = '<div class="empty"><div class="empty-icon"><i class="fas fa-users-slash"></i></div><h3>No users found</h3></div>';
+                return
+            }
+            let html = '';
+            users.forEach(u => {
+                const av = u.photoURL || makeAvatar(u.name);
+                const banned = u.banned === true;
+                html += `<div class="adm-user-row" onclick="admOpenUserEdit('${u.id}')">
+          <img src="${av}" class="avatar" style="width:48px;height:48px;border:2px solid var(--border)" data-name="${escapeHTML(u.name||'')}" onerror="onImgError(this)">
+          <div class="adm-user-info">
+            <div class="adm-user-name">
+              ${escapeHTML(u.name||'Unknown')}
+              ${badgeHTML(getBadge(u.role,u.badge))}
+              ${banned?'<span class="chip chip-ban"><i class="fas fa-ban"></i> Banned</span>':''}
+            </div>
+            <div class="adm-user-meta">${escapeHTML(u.email||'')} · Joined ${fmtDate(u.joinDate)}</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:var(--t3);font-size:12px;flex-shrink:0"></i>
+        </div>`
+            });
+            el.innerHTML = html
+        }
+
+        function admOpenUserEdit(uid) {
+            const u = admAllUsersCache.find(x => x.id === uid);
+            if (!u) return;
+            admEditUserId = uid;
+            const av = u.photoURL || makeAvatar(u.name);
+            $('user-modal-photo').src = av;
+            $('user-modal-photo').dataset.name = u.name || '';
+            $('user-modal-name').textContent = u.name || 'Unknown';
+            $('user-modal-email').textContent = u.email || '';
+            $('user-modal-role').value = u.role || 'user';
+            $('user-modal-badge').value = u.badge || 'newbie';
+            const tog = $('user-modal-ban-toggle');
+            tog.classList.toggle('on', u.banned === true);
+            $('user-modal').classList.remove('hidden')
+        }
+
+        function admCloseUserModal() {
+            $('user-modal').classList.add('hidden');
+            admEditUserId = null
+        }
+
+        function admToggleBanToggle() {
+            $('user-modal-ban-toggle').classList.toggle('on')
+        }
+
+        async function admSaveUserChanges() {
+            if (!admEditUserId) return;
+            setBtnLoading('user-modal-save', true);
+            try {
+                const role = $('user-modal-role').value;
+                const badge = $('user-modal-badge').value;
+                const banned = $('user-modal-ban-toggle').classList.contains('on');
+
+                await db.collection('users').doc(admEditUserId).update({
+                    role,
+                    badge,
+                    banned
+                });
+
+                const bInfo = getBadge(role, badge);
+                const postsSnap = await db.collection('posts').where('authorId', '==', admEditUserId).get();
+                if (!postsSnap.empty) {
+                    const batch = db.batch();
+                    postsSnap.forEach(doc => {
+                        batch.update(doc.ref, {
+                            authorBadgeLabel: bInfo.label,
+                            authorBadgeClass: bInfo.cls,
+                            authorBadgeIcon: bInfo.icon
+                        })
+                    });
+                    await batch.commit()
+                }
+
+                const idx = admAllUsersCache.findIndex(x => x.id === admEditUserId);
+                if (idx > -1) admAllUsersCache[idx] = {
+                    ...admAllUsersCache[idx],
+                    role,
+                    badge,
+                    banned
+                };
+                if (banned) {
+                    await db.collection('notifications').add({
+                        userId: admEditUserId,
+                        title: '⚠️ Account Suspended',
+                        message: 'Your account has been suspended. Please contact support.',
+                        read: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        sentBy: currentUser.uid
+                    }).catch(() => {})
+                }
+                showToast('User updated ✅', 'success');
+                admCloseUserModal();
+                admRenderUserList(admAllUsersCache)
+            } catch (e) {
+                showToast(e.message, 'error')
+            } finally {
+                setBtnLoading('user-modal-save', false, '<i class="fas fa-save"></i> Save Changes')
+            }
+        }
+
+        /* ── NOTIFICATIONS ── */
+        function admSetNotifTarget(type, btn) {
+            admNotifTarget = type;
+            admNotifTargetUserId = null;
+            admNotifTargetUserName = '';
+            document.querySelectorAll('.adm-notif-target-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            $('notif-user-picker').style.display = type === 'user' ? 'block' : 'none';
+            $('notif-selected').style.display = 'none';
+            $('notif-search-inp').value = '';
+            $('notif-user-results').innerHTML = ''
+        }
+
+        function admSearchNotifUser(q) {
+            const lq = q.toLowerCase().trim();
+            if (!lq) {
+                $('notif-user-results').innerHTML = '';
+                return
+            }
+            if (!admAllUsersFetched) {
+                admLoadUsersView().then(() => admSearchNotifUser(q));
+                return
+            }
+            const filtered = admAllUsersCache.filter(u => (u.name || '').toLowerCase().includes(lq) || (u.email || '').toLowerCase().includes(lq)).slice(0, 10);
+            if (!filtered.length) {
+                $('notif-user-results').innerHTML = '<div style="padding:12px;font-size:13px;color:var(--t3)">No users found</div>';
+                return
+            }
+            let html = '';
+            filtered.forEach(u => {
+                const safeN = (u.name || '').replace(/'/g, "\\'");
+                const safeE = (u.email || '').replace(/'/g, "\\'");
+                html += `<div onclick="admSelectNotifUser('${u.id}','${safeN}','${safeE}')"
+          style="display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s"
+          onmouseenter="this.style.background='var(--bg2)'" onmouseleave="this.style.background=''">
+          <img src="${u.photoURL||makeAvatar(u.name)}" class="avatar" style="width:36px;height:36px" data-name="${escapeHTML(u.name||'')}" onerror="onImgError(this)">
+          <div><div style="font-size:13px;font-weight:700;color:var(--t1)">${escapeHTML(u.name||'Unknown')}</div><div style="font-size:11.5px;color:var(--t3)">${escapeHTML(u.email||'')}</div></div>
+        </div>`
+            });
+            $('notif-user-results').innerHTML = html
+        }
+
+        function admSelectNotifUser(uid, name, email) {
+            admNotifTargetUserId = uid;
+            admNotifTargetUserName = name;
+            $('notif-search-inp').value = name;
+            $('notif-user-results').innerHTML = '';
+            const sel = $('notif-selected');
+            sel.style.display = 'block';
+            sel.innerHTML = `<i class="fas fa-check-circle"></i> Sending to: <strong>${escapeHTML(name)}</strong> (${escapeHTML(email)})`
+        }
+
+        async function admSendNotification() {
+            const title = $('notif-title').value.trim();
+            const msg = $('notif-msg').value.trim();
+            const btnText = $('notif-btn-text').value.trim();
+            const btnLink = $('notif-btn-link').value.trim();
+
+            if (!title) {
+                showToast('Please enter a notification title', 'warn');
+                return
+            }
+            if (!msg) {
+                showToast('Please enter a message', 'warn');
+                return
+            }
+            if (admNotifTarget === 'user' && !admNotifTargetUserId) {
+                showToast('Please select a user first', 'warn');
+                return
+            }
+            setBtnLoading('notif-send-btn', true);
+            try {
+                const now = firebase.firestore.FieldValue.serverTimestamp();
+                if (admNotifTarget === 'all') {
+                    if (!admAllUsersFetched) await admLoadUsersView();
+                    const batch = db.batch();
+                    admAllUsersCache.forEach(u => {
+                        const ref = db.collection('notifications').doc();
+                        batch.set(ref, {
+                            userId: u.id,
+                            title,
+                            message: msg,
+                            read: false,
+                            createdAt: now,
+                            sentBy: currentUser.uid,
+                            target: 'all',
+                            btnText,
+                            btnLink
+                        })
+                    });
+                    await batch.commit();
+                    showToast(`✅ Sent to ${admAllUsersCache.length} users`, 'success')
+                } else {
+                    await db.collection('notifications').add({
+                        userId: admNotifTargetUserId,
+                        title,
+                        message: msg,
+                        read: false,
+                        createdAt: now,
+                        sentBy: currentUser.uid,
+                        target: 'specific',
+                        btnText,
+                        btnLink
+                    });
+                    showToast(`✅ Sent to ${admNotifTargetUserName}`, 'success')
+                }
+                $('notif-title').value = '';
+                $('notif-msg').value = '';
+                $('notif-btn-text').value = '';
+                $('notif-btn-link').value = '';
+                admNotifTargetUserId = null;
+                admNotifTargetUserName = '';
+                admSetNotifTarget('all', $('notif-all-btn'));
+                admLoadNotifHistory()
+            } catch (e) {
+                showToast(e.message, 'error');
+                console.error(e)
+            } finally {
+                setBtnLoading('notif-send-btn', false, '<i class="fas fa-paper-plane"></i> Send Notification')
+            }
+        }
+
+        async function admLoadNotifHistory() {
+            const el = $('notif-history');
+            el.innerHTML = loadingHTML();
+            try {
+                const snap = await db.collection('notifications').orderBy('createdAt', 'desc').limit(20).get();
+                if (snap.empty) {
+                    el.innerHTML = '<div style="text-align:center;padding:28px;color:var(--t3);font-size:13.5px">No notifications sent yet</div>';
+                    return
+                }
+                let html = '';
+                snap.forEach(d => {
+                    const n = d.data();
+                    const targetLabel = n.target === 'all' ? '📢 Everyone' : n.userId;
+                    html += `<div class="card" style="margin-bottom:8px;padding:14px;border-left:3px solid var(--accent)">
+            <div style="font-size:14px;font-weight:800;color:var(--t1);font-family:var(--fd)">${escapeHTML(n.title)}</div>
+            <div style="font-size:13px;color:var(--t2);margin-top:5px;line-height:1.55">${escapeHTML(n.message)}</div>
+            <div style="font-size:11.5px;color:var(--t3);margin-top:8px;font-weight:600;display:flex;align-items:center;gap:8px">
+              <span>To: ${escapeHTML(targetLabel)}</span>
+              <span>·</span><span>${timeAgo(n.createdAt)}</span>
+            </div>
+          </div>`
+                });
+                el.innerHTML = html
+            } catch (e) {
+                el.innerHTML = `<div style="padding:16px;color:var(--danger);font-size:13px">${escapeHTML(e.message)}</div>`
+            }
+        }
+
+        /* ── MESSAGES MONITOR ── */
+        async function admLoadAllChats() {
+            const el = $('msg-content');
+            el.innerHTML = loadingHTML('Loading conversations…');
+            try {
+                const snap = await db.collection('chats').orderBy('updatedAt', 'desc').limit(60).get();
+                if (snap.empty) {
+                    el.innerHTML = '<div class="empty"><div class="empty-icon"><i class="fas fa-comment-slash"></i></div><h3>No conversations yet</h3></div>';
+                    return
+                }
+                const allUids = new Set();
+                const chats = [];
+                snap.forEach(d => {
+                    const data = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    chats.push(data);
+                    (data.participants || []).forEach(uid => allUids.add(uid))
+                });
+                const userMap = {};
+                const uidArr = [...allUids];
+                for (let i = 0; i < uidArr.length; i += 10) {
+                    const chunk = uidArr.slice(i, i + 10);
+                    if (!chunk.length) break;
+                    try {
+                        const us = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', chunk).get();
+                        us.forEach(d => userMap[d.id] = {
+                            id: d.id,
+                            ...d.data()
+                        })
+                    } catch (_) {}
+                }
+                let html = '';
+                chats.forEach(chat => {
+                    const names = (chat.participants || []).map(uid => userMap[uid]?.name || uid.substring(0, 8) + '…');
+                    const preview = (chat.lastMessage || '').substring(0, 80) || 'No messages';
+                    const lastSender = chat.lastSenderId ? userMap[chat.lastSenderId]?.name || 'User' : '';
+                    const safeTitle = names.join(' ↔ ').replace(/'/g, "\\'");
+                    html += `<div class="adm-chat-row" onclick="admViewChat('${chat.id}','${safeTitle}')">
+            <div class="adm-chat-icon"><i class="fas fa-comment-dots"></i></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:700;color:var(--t1);font-family:var(--fd)">${escapeHTML(names.join(' ↔ '))}</div>
+              <div style="font-size:12px;color:var(--t3);margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+                ${lastSender?`<strong>${escapeHTML(lastSender)}:</strong> `:''}${escapeHTML(preview)}
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:11px;color:var(--t3);font-weight:600">${timeAgo(chat.updatedAt)}</div>
+            </div>
+          </div>`
+                });
+                el.innerHTML = html
+            } catch (e) {
+                el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`;
+                console.error(e)
+            }
+        }
+
+        async function admViewChat(chatId, title) {
+            admChatModalId = chatId;
+            $('chat-modal-title').textContent = title;
+            $('chat-modal-sub').textContent = 'Admin view — all messages visible';
+            $('chat-modal').classList.remove('hidden');
+            const el = $('chat-modal-messages');
+            el.innerHTML = loadingHTML();
+            try {
+                const snap = await db.collection('chats').doc(chatId).collection('messages').orderBy('createdAt', 'asc').limit(100).get();
+                if (snap.empty) {
+                    el.innerHTML = '<div style="text-align:center;padding:28px;color:var(--t3);font-size:13px">No messages yet</div>';
+                    return
+                }
+                el.innerHTML = '';
+                snap.forEach(d => {
+                    const m = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    const wrap = document.createElement('div');
+                    wrap.style.display = 'flex';
+                    wrap.style.flexDirection = 'column';
+                    const bub = document.createElement('div');
+                    bub.className = 'adm-msg-bubble them';
+                    const imgPart = m.imageUrl ? `<img src="${m.imageUrl}" style="max-width:180px;border-radius:10px;display:block;margin-top:4px" onerror="onImgError(this)">` : '';
+                    bub.innerHTML = `<div style="font-size:11px;font-weight:800;color:var(--accent);margin-bottom:4px;font-family:var(--fd)">${escapeHTML(m.senderName||'User')}</div>${escapeHTML(m.text||'')}${imgPart}`;
+                    const time = document.createElement('div');
+                    time.className = 'adm-msg-time';
+                    time.textContent = timeAgo(m.createdAt);
+                    wrap.appendChild(bub);
+                    wrap.appendChild(time);
+                    el.appendChild(wrap)
+                });
+                el.scrollTop = el.scrollHeight
+            } catch (e) {
+                el.innerHTML = `<div style="padding:16px;color:var(--danger);font-size:13px">${escapeHTML(e.message)}</div>`
+            }
+        }
+
+        function admCloseChatModal() {
+            $('chat-modal').classList.add('hidden');
+            admChatModalId = null
+        }
+
+        async function admDeleteChatFromModal() {
+            if (!admChatModalId) return;
+            const ok = await confirmDialog('Delete Conversation', 'Permanently delete this entire conversation? This cannot be undone.');
+            if (!ok) return;
+            try {
+                const msgs = await db.collection('chats').doc(admChatModalId).collection('messages').get();
+                const batch = db.batch();
+                msgs.forEach(d => batch.delete(d.ref));
+                batch.delete(db.collection('chats').doc(admChatModalId));
+                await batch.commit();
+                showToast('Conversation deleted', 'success');
+                admCloseChatModal();
+                admLoadAllChats()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
         /* ═══════════════════════════════════
            INIT
         ═══════════════════════════════════ */
@@ -5844,12 +7469,27 @@
                     closeLightbox();
                     resolveConfirm(false);
                     closeShareSheet();
-                    $('new-msg-modal').classList.add('hidden')
+                    $('new-msg-modal').classList.add('hidden');
+                    $('user-modal') && $('user-modal').classList.add('hidden');
+                    $('post-modal') && $('post-modal').classList.add('hidden');
+                    $('chat-modal') && $('chat-modal').classList.add('hidden')
                 }
             });
             // Hardware back button (Android) — always re-push state first to prevent exit
             window.addEventListener('popstate', e => {
                 history.pushState(null, '', location.href); // keep a state so next back is catchable
+                if ($('chat-modal') && !$('chat-modal').classList.contains('hidden')) {
+                    admCloseChatModal();
+                    return
+                }
+                if ($('post-modal') && !$('post-modal').classList.contains('hidden')) {
+                    admClosePostModal();
+                    return
+                }
+                if ($('user-modal') && !$('user-modal').classList.contains('hidden')) {
+                    admCloseUserModal();
+                    return
+                }
                 if (currentChatId) {
                     closeChat();
                     return
