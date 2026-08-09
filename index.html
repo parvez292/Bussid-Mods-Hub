@@ -48,7 +48,6 @@
             --accent2: #0d38b0;
             --accent3: #6d28d9;
             --accent-light: rgba(18, 70, 214, 0.1);
-            --accent-glow: rgba(99, 60, 214, 0.35);
             --success: #059669;
             --warn: #d97706;
             --danger: #dc2626;
@@ -61,7 +60,7 @@
             --sh1: 0 2px 8px rgba(6, 14, 36, .07), 0 1px 2px rgba(6, 14, 36, .05);
             --sh2: 0 6px 24px rgba(6, 14, 36, .11), 0 2px 6px rgba(6, 14, 36, .06);
             --sh3: 0 12px 44px rgba(6, 14, 36, .15);
-            --grd: linear-gradient(135deg, #1246d6 0%, #4c2fd6 55%, #6d28d9 100%);
+            --grd: linear-gradient(135deg, #1246d6 0%, #6d28d9 100%);
             --grd2: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
             --grd3: linear-gradient(135deg, #059669 0%, #0891b2 100%);
             --fd: 'Merriweather', Georgia, 'Times New Roman', serif;
@@ -78,7 +77,6 @@
             --t3: #334268;
             --border: #1a2b4a;
             --accent-light: rgba(18, 70, 214, 0.18);
-            --accent-glow: rgba(99, 60, 214, 0.5);
             --danger-light: rgba(220, 38, 38, 0.13);
             --sh1: 0 2px 8px rgba(0, 0, 0, .45);
             --sh2: 0 6px 24px rgba(0, 0, 0, .5);
@@ -448,13 +446,6 @@
         .card-hover:active {
             transform: scale(.975);
             box-shadow: var(--sh2)
-        }
-
-        @media(hover:hover) {
-            .card-hover:hover {
-                transform: translateY(-3px);
-                box-shadow: var(--sh2)
-            }
         }
 
         /* ── SPARK BUTTON ── */
@@ -1342,30 +1333,19 @@
             overflow: hidden;
             white-space: nowrap;
             position: relative;
-            -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
-            mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
         }
-        .marquee-track {
-            display: inline-flex;
-            align-items: center;
-            width: max-content;
-            animation: marqueeScroll linear infinite;
-            animation-duration: var(--mq-dur, 16s);
-        }
-        .marquee-track span {
+        .marquee-text {
+            display: inline-block;
             font-size: 13.5px;
             font-weight: 800;
             font-family: var(--fb);
             letter-spacing: 0.3px;
-            white-space: nowrap;
-            padding-right: 56px;
-        }
-        .marquee-wrap.paused .marquee-track {
-            animation-play-state: paused;
+            padding-left: 100%;
+            animation: marqueeScroll 20s linear infinite;
         }
         @keyframes marqueeScroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            100% { transform: translateX(-100%); }
         }
 
         /* ── GRID CATEGORIES ── */
@@ -3730,23 +3710,6 @@
             font-size: 13.5px
         }
 
-        .adm-sort-select {
-            width: auto;
-            padding: 9px 30px 9px 14px !important;
-            font-size: 12.5px !important;
-            font-weight: 700;
-            color: var(--t2);
-            background-color: var(--card);
-            background-image: linear-gradient(45deg, transparent 50%, var(--t3) 50%), linear-gradient(135deg, var(--t3) 50%, transparent 50%);
-            background-position: calc(100% - 16px) center, calc(100% - 11px) center;
-            background-size: 5px 5px, 5px 5px;
-            background-repeat: no-repeat;
-            appearance: none;
-            -webkit-appearance: none;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
         .adm-user-row {
             display: flex;
             align-items: center;
@@ -3775,26 +3738,13 @@
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 3px;
-            max-width: 100%;
-        }
-
-        .adm-user-name .adm-user-name-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 100%;
-            flex: 1 1 auto;
-            min-width: 40px;
+            margin-bottom: 3px
         }
 
         .adm-user-meta {
             font-size: 11.5px;
             color: var(--t3);
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-weight: 500
         }
 
         .chip-ban {
@@ -3849,68 +3799,6 @@
             gap: 7px;
             padding: 0 16px 14px;
             flex-wrap: wrap
-        }
-
-        /* ── ADMIN POST REVIEW MODAL ── */
-        .adm-review-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-            gap: 6px;
-            padding: 16px 18px 0;
-        }
-
-        .adm-review-gallery img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            border-radius: 12px;
-            cursor: zoom-in;
-            background: var(--bg2);
-        }
-
-        .adm-review-noimg {
-            margin: 16px 18px 0;
-            padding: 18px;
-            border-radius: 14px;
-            background: var(--bg2);
-            color: var(--t3);
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .adm-review-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .adm-review-link-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 14px;
-            background: var(--bg2);
-        }
-
-        .adm-review-link-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-            flex: 1;
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--t2);
-        }
-
-        .adm-review-link-info span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .adm-activity-item {
@@ -4291,10 +4179,7 @@
                     <div class="marquee-wrap" onclick="handleMarqueeClick()">
                         <div class="marquee-icon"><i class="fas fa-bullhorn"></i></div>
                         <div class="marquee-content">
-                            <div class="marquee-track" id="marquee-track">
-                                <span id="marquee-text">Loading notice...</span>
-                                <span id="marquee-text-dup" aria-hidden="true">Loading notice...</span>
-                            </div>
+                            <span class="marquee-text" id="marquee-text">Loading notice...</span>
                         </div>
                         <i class="fas fa-chevron-right" style="font-size: 14px; opacity: 0.7;"></i>
                     </div>
@@ -4668,7 +4553,7 @@
                 <div id="adm-users-view" class="adm-sub">
                     <div class="adm-search-bar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
                         <input type="search" class="inp" id="user-search-inp" placeholder="Search by name or email…" oninput="admFilterAndSortUsers()" style="flex:1;min-width:120px;">
-                        <select id="adm-user-sort" class="inp adm-sort-select" onchange="admFilterAndSortUsers()">
+                        <select id="adm-user-sort" class="inp" style="width:auto;padding:8px 30px 8px 12px;font-size:12.5px" onchange="admFilterAndSortUsers()">
                             <option value="date-desc">Newest First</option>
                             <option value="date-asc">Oldest First</option>
                             <option value="name-asc">Name (A-Z)</option>
@@ -4851,10 +4736,6 @@
                 </div>
             </div>
             <div class="form-row">
-                <label class="fl">Name</label>
-                <input type="text" class="inp" id="user-modal-name-inp" maxlength="40" placeholder="User's display name">
-            </div>
-            <div class="form-row">
                 <label class="fl">Role</label>
                 <select id="user-modal-role" class="inp">
                     <option value="user">User</option>
@@ -4926,19 +4807,6 @@
                 <button class="btn btn-ghost" style="flex:1" onclick="admClosePostModal()"><i class="fas fa-times"></i> Cancel</button>
                 <button class="btn btn-primary" style="flex:1" id="pm-save" onclick="admSavePostChanges()"><i class="fas fa-save"></i> Save</button>
             </div>
-        </div>
-    </div>
-
-    <!-- ══ ADMIN: POST REVIEW MODAL (পুঙ্খানুপুঙ্খ পর্যালোচনা) ══ -->
-    <div id="adm-review-modal" class="modal-backdrop hidden">
-        <div class="modal-sheet" style="padding:0;max-height:92vh;display:flex;flex-direction:column">
-            <div class="modal-handle" style="margin:14px auto 10px"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:0 18px 10px">
-                <div style="font-size:16px;font-weight:800;color:var(--t1);font-family:var(--fd)"><i class="fas fa-magnifying-glass" style="color:var(--accent);margin-right:6px"></i>Review Submission</div>
-                <button class="icon-btn" onclick="admCloseReviewModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="adm-review-content" style="overflow-y:auto;flex:1"></div>
-            <div id="adm-review-actions" style="display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--border)"></div>
         </div>
     </div>
 
@@ -5283,54 +5151,6 @@
             return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 0;gap:18px"><div class="spin"></div>${msg?`<div style="font-size:13px;color:var(--t3);font-weight:600">${msg}</div>`:''}</div>`
         }
 
-        /* স্কেলেটন লোডিং হেল্পার — স্পিনারের বদলে কনটেন্টের আকৃতির শেপ দেখায় যাতে লোডিং স্মুথ ও প্রফেশনাল লাগে */
-        function skeletonGridHTML(n = 4) {
-            let h = '<div class="post-grid">';
-            for (let i = 0; i < n; i++) {
-                h += `<div class="card" style="overflow:hidden">
-          <div class="sk" style="height:150px;border-radius:0"></div>
-          <div style="padding:14px">
-            <div class="sk" style="height:13px;width:${60 + (i % 3) * 8}%;margin-bottom:9px"></div>
-            <div class="sk" style="height:11px;width:${75 - (i % 4) * 5}%;margin-bottom:9px"></div>
-            <div class="sk" style="height:11px;width:40%"></div>
-          </div>
-        </div>`
-            }
-            h += '</div>';
-            return h;
-        }
-
-        function skeletonListHTML(n = 6) {
-            let h = '';
-            for (let i = 0; i < n; i++) {
-                h += `<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)">
-          <div class="sk" style="width:48px;height:48px;border-radius:14px;flex-shrink:0"></div>
-          <div style="flex:1;min-width:0">
-            <div class="sk" style="height:13px;width:${50 + (i % 3) * 12}%;margin-bottom:8px"></div>
-            <div class="sk" style="height:11px;width:${35 + (i % 4) * 10}%"></div>
-          </div>
-        </div>`
-            }
-            return h;
-        }
-
-        function skeletonDetailHTML() {
-            return `<div class="sk" style="height:280px;border-radius:0"></div>
-      <div style="padding:18px">
-        <div class="sk" style="height:20px;width:70%;margin-bottom:14px"></div>
-        <div class="sk" style="height:12px;width:40%;margin-bottom:22px"></div>
-        <div style="display:flex;gap:10px;margin-bottom:22px">
-          <div class="sk" style="height:56px;flex:1;border-radius:16px"></div>
-          <div class="sk" style="height:56px;flex:1;border-radius:16px"></div>
-          <div class="sk" style="height:56px;flex:1;border-radius:16px"></div>
-        </div>
-        <div class="sk" style="height:64px;width:100%;margin-bottom:14px;border-radius:16px"></div>
-        <div class="sk" style="height:12px;width:100%;margin-bottom:8px"></div>
-        <div class="sk" style="height:12px;width:92%;margin-bottom:8px"></div>
-        <div class="sk" style="height:12px;width:80%"></div>
-      </div>`;
-        }
-
         function getPlatformInfo(p) {
             const m = {
                 // নতুন প্ল্যাটফর্ম
@@ -5656,9 +5476,8 @@
                         initNotifListener();
                         initMsgListener();
                         navTo('home');
-                        loadFeaturedMods();
-                        loadMarqueeNotice(); // <-- মার্কিউ নোটিশ বোর্ড থেকে সর্বশেষ নোটিশ লোড করার ফাংশন কল করা হলো
-
+loadFeaturedMods();
+                        
                         checkLatestNotice(); // <-- পপ-আপ নোটিশ চেক করার ফাংশন এখানে কল করা হলো
 
                     } else {
@@ -6016,7 +5835,7 @@
             }
         }
 
-        // মার্কিউ নোটিশ লোড করার ফাংশন — নোটিশ বোর্ডে থাকা সর্বশেষ নোটিশটি মার্কিউতে দেখাবে
+        // মার্কিউ নোটিশ লোড করার ফাংশন
         async function loadMarqueeNotice() {
             try {
                 const snap = await db.collection('notifications')
@@ -6026,20 +5845,9 @@
                 
                 if (!snap.empty) {
                     const n = snap.docs[0].data();
-                    const text = `🔥 ${n.title} — ${n.message}`;
-                    $('marquee-text').textContent = text;
-                    $('marquee-text-dup').textContent = text;
-                    marqueeLinkUrl = n.btnLink || '';
+                    $('marquee-text').textContent = `🔥 ${n.title} — ${n.message}`;
+                    marqueeLinkUrl = n.btnLink || ''; 
                     $('marquee-container').style.display = 'block';
-                    // টেক্সটের দৈর্ঘ্য অনুযায়ী স্ক্রল স্পিড ঠিক করা হচ্ছে যাতে ছোট/বড় সব নোটিশেই গতি সামঞ্জস্যপূর্ণ থাকে
-                    requestAnimationFrame(() => {
-                        const track = $('marquee-track');
-                        if (track) {
-                            const singleWidth = track.scrollWidth / 2;
-                            const duration = Math.max(8, Math.min(40, singleWidth / 45));
-                            track.style.setProperty('--mq-dur', duration + 's');
-                        }
-                    });
                 }
             } catch (e) {
                 console.warn('Marquee load error:', e);
@@ -6086,7 +5894,7 @@
         async function openPost(postId) {
             currentPostId = postId;
             navTo('detail');
-            $('detail-content').innerHTML = skeletonDetailHTML();
+            $('detail-content').innerHTML = loadingHTML();
             try {
                 const ref = db.collection('posts').doc(postId);
                 const doc = await ref.get();
@@ -6231,7 +6039,7 @@
         ═══════════════════════════════════ */
         async function loadNotifications() {
             const list = $('notif-list');
-            list.innerHTML = skeletonListHTML(6);
+            list.innerHTML = loadingHTML();
             try {
                 const snap = await db.collection('notifications').where('userId', '==', currentUser.uid).orderBy('createdAt', 'desc').limit(50).get();
                 if (snap.empty) {
@@ -6451,7 +6259,7 @@
         ═══════════════════════════════════ */
         async function loadFavorites() {
             const el = $('fav-content');
-            el.innerHTML = skeletonGridHTML(4);
+            el.innerHTML = loadingHTML();
             try {
                 const snap = await db.collection('posts').where('status', '==', 'approved').where('favoritedBy', 'array-contains', currentUser.uid).orderBy('createdAt', 'desc').get();
                 if (snap.empty) {
@@ -6476,7 +6284,7 @@
             if (!uid) return;
             navTo('user');
             const el = $('user-content');
-            el.innerHTML = skeletonListHTML(5);
+            el.innerHTML = loadingHTML();
             try {
                 const [udoc, ps] = await Promise.all([db.collection('users').doc(uid).get(), db.collection('posts').where('authorId', '==', uid).where('status', '==', 'approved').orderBy('createdAt', 'desc').limit(20).get()]);
                 if (!udoc.exists) {
@@ -6690,7 +6498,7 @@
             if (viewHistory[viewHistory.length - 1] !== 'myposts') viewHistory.push('myposts');
             requestAnimationFrame(() => window.scrollTo(0, 0));
             const el = $('mp-content');
-            el.innerHTML = skeletonGridHTML(4);
+            el.innerHTML = loadingHTML();
             try {
                 const snap = await db.collection('posts').where('authorId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
                 if (snap.empty) {
@@ -7363,7 +7171,6 @@
         let admEditUserId = null,
             admChatModalId = null,
             admCurrentSub = 'dashboard';
-        let admPostsCache = {}, admReviewPostId = null;
 
         const ADMIN_LOADERS = {
             dashboard: admLoadDashboard,
@@ -7487,7 +7294,7 @@
 
         async function admLoadPosts() {
             const el = $('posts-content');
-            el.innerHTML = skeletonListHTML(6);
+            el.innerHTML = loadingHTML('Loading posts…');
             try {
                 let q;
                 if (admPostTab === 'pending') {
@@ -7505,13 +7312,11 @@
                     return
                 }
                 let html = '';
-                admPostsCache = {};
                 snap.forEach(d => {
                     const p = {
                         id: d.id,
                         ...d.data()
                     };
-                    admPostsCache[d.id] = p;
                     const img = p.images && p.images[0] ? p.images[0] : '';
                     const chipCls = {
                         approved: 'chip-ok',
@@ -7519,8 +7324,8 @@
                         rejected: 'chip-rej'
                     } [p.status] || 'chip-pend';
                     html += `<div class="adm-post-row-wrap">
-            <div class="adm-post-row" onclick="admReviewPost('${d.id}')" style="cursor:pointer">
-              ${img?`<img src="${img}" class="adm-post-thumb" onerror="this.onerror=null;this.src=makeAvatar('?')" loading="lazy">`:`<div class="adm-post-thumb"><i class="fas fa-image" style="font-size:22px;color:var(--t3)"></i></div>`}
+            <div class="adm-post-row">
+              ${img?`<img src="${img}" class="adm-post-thumb" onerror="this.onerror=null;this.src=makeAvatar('?')">`:`<div class="adm-post-thumb"><i class="fas fa-image" style="font-size:22px;color:var(--t3)"></i></div>`}
               <div class="adm-post-row-body">
                 <div class="adm-post-row-title c2">${escapeHTML(p.title||'Untitled')}</div>
                 <div class="adm-post-row-meta">
@@ -7537,17 +7342,16 @@
               </div>
             </div>
             <div class="adm-post-actions">
-              <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2)" onclick="event.stopPropagation();admReviewPost('${d.id}')"><i class="fas fa-magnifying-glass"></i> Review</button>
               ${p.status==='pending'?`
-                <button class="btn btn-success btn-sm" onclick="event.stopPropagation();admApprovePost('${d.id}')"><i class="fas fa-check"></i> Approve</button>
-                <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();admRejectPost('${d.id}')"><i class="fas fa-times"></i> Reject</button>
+                <button class="btn btn-success btn-sm" onclick="admApprovePost('${d.id}')"><i class="fas fa-check"></i> Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="admRejectPost('${d.id}')"><i class="fas fa-times"></i> Reject</button>
               `:''}
               ${p.pendingEdit?`
-                <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2)" onclick="event.stopPropagation();admApproveEdit('${d.id}')"><i class="fas fa-check-double"></i> Approve Edit</button>
-                <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();admRejectEdit('${d.id}')"><i class="fas fa-times"></i> Reject Edit</button>
+                <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2)" onclick="admApproveEdit('${d.id}')"><i class="fas fa-check-double"></i> Approve Edit</button>
+                <button class="btn btn-ghost btn-sm" onclick="admRejectEdit('${d.id}')"><i class="fas fa-times"></i> Reject Edit</button>
               `:''}
-              <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();admOpenPostEdit('${d.id}')"><i class="fas fa-edit"></i> Edit</button>
-              <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)" onclick="event.stopPropagation();admDeletePost('${d.id}')"><i class="fas fa-trash"></i></button>
+              <button class="btn btn-ghost btn-sm" onclick="admOpenPostEdit('${d.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)" onclick="admDeletePost('${d.id}')"><i class="fas fa-trash"></i></button>
             </div>
           </div>`
                 });
@@ -7556,82 +7360,6 @@
                 el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`;
                 console.error(e)
             }
-        }
-
-        /* ── ADMIN: POST REVIEW MODAL (পুঙ্খানুপুঙ্খভাবে পোস্ট পরীক্ষা) ── */
-        function admReviewPost(id) {
-            const p = admPostsCache[id];
-            if (!p) { showToast('Post data not loaded, please refresh', 'warn'); return; }
-            admReviewPostId = id;
-
-            const imgs = p.images || [];
-            const galHTML = imgs.length ? `<div class="adm-review-gallery">${imgs.map((im,i) => `<img src="${im}" alt="Post image ${i+1}" onerror="onImgError(this)" loading="lazy" onclick="openLightbox('${im}',${JSON.stringify(imgs).replace(/"/g,'&quot;')})">`).join('')}</div>` :
-                `<div class="adm-review-noimg"><i class="fas fa-image"></i> No images uploaded</div>`;
-
-            let links = [];
-            if (p.downloadLinks && p.downloadLinks.length) {
-                links = p.downloadLinks.map(l => ({ url: l.url, platform: l.platform }));
-            } else if (p.downloadLink) {
-                links = [{ url: p.downloadLink, platform: '' }];
-            }
-            const linksHTML = links.length ? links.map((l, i) => {
-                const pi = getPlatformInfo(l.platform);
-                return `<div class="adm-review-link-row">
-            <div class="adm-review-link-info">
-              <i class="${pi.icon}" style="color:${pi.color}"></i>
-              <span class="c1">${escapeHTML(l.url)}</span>
-            </div>
-            <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2);flex-shrink:0" onclick="window.open('${l.url.replace(/'/g,"\\'")}','_blank','noopener')"><i class="fas fa-arrow-up-right-from-square"></i> Check Link</button>
-          </div>`
-            }).join('') : `<div class="adm-review-noimg"><i class="fas fa-link-slash"></i> No download links provided</div>`;
-
-            const promoHTML = (p.promoLink && isValidUrl(p.promoLink)) ? `<div class="adm-review-link-row">
-          <div class="adm-review-link-info"><i class="fas fa-video" style="color:var(--accent3)"></i><span class="c1">${escapeHTML(p.promoLink)}</span></div>
-          <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2);flex-shrink:0" onclick="window.open('${p.promoLink.replace(/'/g,"\\'")}','_blank','noopener')"><i class="fas fa-arrow-up-right-from-square"></i> Check Link</button>
-        </div>` : '';
-
-            $('adm-review-content').innerHTML = `
-        ${galHTML}
-        <div style="padding:16px 18px 4px">
-          <div style="font-size:18px;font-weight:800;color:var(--t1);font-family:var(--fd);margin-bottom:6px">${escapeHTML(p.title||'Untitled')}</div>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-            <span class="chip chip-pend"><i class="fas fa-folder"></i> ${escapeHTML(p.category||'—')}</span>
-            <span style="font-size:11.5px;color:var(--t3);font-weight:600">By ${escapeHTML(p.authorName||'Unknown')} · ${timeAgo(p.createdAt)}</span>
-          </div>
-          <div class="adm-sec-title" style="padding:0 0 8px">Description</div>
-          <div style="font-size:13.5px;color:var(--t2);line-height:1.6;white-space:pre-line;margin-bottom:18px">${escapeHTML(p.description||'No description provided.')}</div>
-          <div class="adm-sec-title" style="padding:0 0 8px">Download Links — verify before approving</div>
-          <div class="adm-review-links">${linksHTML}${promoHTML}</div>
-        </div>`;
-
-            const actionsEl = $('adm-review-actions');
-            if (p.status === 'pending') {
-                actionsEl.innerHTML = `
-          <button class="btn btn-danger" style="flex:1" onclick="admReviewAction('reject')"><i class="fas fa-times"></i> Reject</button>
-          <button class="btn btn-success" style="flex:1" onclick="admReviewAction('approve')"><i class="fas fa-check"></i> Approve Post</button>`;
-            } else if (p.pendingEdit) {
-                actionsEl.innerHTML = `
-          <button class="btn btn-ghost" style="flex:1" onclick="admReviewAction('rejectEdit')"><i class="fas fa-times"></i> Reject Edit</button>
-          <button class="btn btn-primary" style="flex:1" onclick="admReviewAction('approveEdit')"><i class="fas fa-check-double"></i> Approve Edit</button>`;
-            } else {
-                actionsEl.innerHTML = `<button class="btn btn-ghost btn-full" onclick="admCloseReviewModal()"><i class="fas fa-times"></i> Close</button>`;
-            }
-            $('adm-review-modal').classList.remove('hidden');
-        }
-
-        async function admReviewAction(action) {
-            const id = admReviewPostId;
-            if (!id) return;
-            admCloseReviewModal();
-            if (action === 'approve') await admApprovePost(id);
-            else if (action === 'reject') await admRejectPost(id);
-            else if (action === 'approveEdit') await admApproveEdit(id);
-            else if (action === 'rejectEdit') await admRejectEdit(id);
-        }
-
-        function admCloseReviewModal() {
-            $('adm-review-modal').classList.add('hidden');
-            admReviewPostId = null;
         }
 
         async function admApprovePost(id) {
@@ -7810,7 +7538,7 @@
                 return
             }
             const el = $('users-content');
-            el.innerHTML = skeletonListHTML(6);
+            el.innerHTML = loadingHTML('Loading users…');
             try {
                 const snap = await db.collection('users').orderBy('name').get();
                 admAllUsersCache = [];
@@ -7869,10 +7597,10 @@
                 const av = u.photoURL || makeAvatar(u.name);
                 const banned = u.banned === true;
                 html += `<div class="adm-user-row" onclick="admOpenUserEdit('${u.id}')">
-          <img src="${av}" class="avatar" style="width:48px;height:48px;border:2px solid var(--border)" data-name="${escapeHTML(u.name||'')}" onerror="onImgError(this)" loading="lazy">
+          <img src="${av}" class="avatar" style="width:48px;height:48px;border:2px solid var(--border)" data-name="${escapeHTML(u.name||'')}" onerror="onImgError(this)">
           <div class="adm-user-info">
             <div class="adm-user-name">
-              <span class="adm-user-name-text">${escapeHTML(u.name||'Unknown')}</span>
+              ${escapeHTML(u.name||'Unknown')}
               ${badgeHTML(getBadge(u.role,u.badge))}
               ${banned?'<span class="chip chip-ban"><i class="fas fa-ban"></i> Banned</span>':''}
             </div>
@@ -7893,7 +7621,6 @@
             $('user-modal-photo').dataset.name = u.name || '';
             $('user-modal-name').textContent = u.name || 'Unknown';
             $('user-modal-email').textContent = u.email || '';
-            $('user-modal-name-inp').value = u.name || '';
             $('user-modal-role').value = u.role || 'user';
             $('user-modal-badge').value = u.badge || 'newbie';
             const tog = $('user-modal-ban-toggle');
@@ -7916,46 +7643,35 @@
             try {
                 // আগের ডেটা চেক করার জন্য
                 const oldUser = admAllUsersCache.find(x => x.id === admEditUserId);
-                const name = $('user-modal-name-inp').value.trim();
                 const role = $('user-modal-role').value;
                 const badge = $('user-modal-badge').value;
                 const banned = $('user-modal-ban-toggle').classList.contains('on');
 
-                if (!name) {
-                    showToast('Please enter a name', 'warn');
-                    setBtnLoading('user-modal-save', false, '<i class="fas fa-save"></i> Save Changes');
-                    return;
-                }
-
                 // কী কী পরিবর্তন হলো তা ডিটেক্ট করা
-                const nameChanged = oldUser && oldUser.name !== name;
                 const roleChanged = oldUser && oldUser.role !== role;
                 const badgeChanged = oldUser && oldUser.badge !== badge;
                 const gotUnbanned = oldUser && (oldUser.banned === true && !banned);
                 const gotBanned = oldUser && (!oldUser.banned && banned);
 
-                // ১. ইউজারের প্রোফাইল আপডেট করা (নাম সহ)
+                // ১. ইউজারের প্রোফাইল আপডেট করা
                 await db.collection('users').doc(admEditUserId).update({
-                    name,
                     role,
                     badge,
                     banned
                 });
 
-                // ২. ইউজারের পুরনো সব পোস্টে নতুন ব্যাচ ও নাম আপডেট করা
+                // ২. ইউজারের পুরনো সব পোস্টে নতুন ব্যাচ আপডেট করা
                 const bInfo = getBadgeData(role, badge);
                 const postsSnap = await db.collection('posts').where('authorId', '==', admEditUserId).get();
 
                 if (!postsSnap.empty) {
                     const batch = db.batch();
                     postsSnap.forEach(doc => {
-                        const upd = {
+                        batch.update(doc.ref, {
                             authorBadgeLabel: bInfo.label,
                             authorBadgeClass: bInfo.cls,
                             authorBadgeIcon: bInfo.icon
-                        };
-                        if (nameChanged) upd.authorName = name;
-                        batch.update(doc.ref, upd);
+                        });
                     });
                     await batch.commit();
                 }
@@ -7964,7 +7680,6 @@
                 const idx = admAllUsersCache.findIndex(x => x.id === admEditUserId);
                 if (idx > -1) admAllUsersCache[idx] = {
                     ...admAllUsersCache[idx],
-                    name,
                     role,
                     badge,
                     banned
@@ -7980,17 +7695,17 @@
                         message: 'Your account has been suspended. Please contact support.',
                         read: false,
                         createdAt: now,
-                        sentBy: currentUser.uid,
+                        sentBy: currentAdmin.uid,
                         isPopup: true
                     }).catch(() => {});
                 } else if (gotUnbanned) {
                     await db.collection('notifications').add({
                         userId: admEditUserId,
                         title: '🎉 Account Restored!',
-                        message: 'আপনার অ্যাকাউন্ট আনব্যান করা হয়েছে। আপনাকে আবার স্বাগতম!',
+                        message: 'আপনার অ্যাকাউন্ট আনব্যান করা হয়েছে। আপনাকে আবার স্বাগতম!',
                         read: false,
                         createdAt: now,
-                        sentBy: currentUser.uid,
+                        sentBy: currentAdmin.uid,
                         isPopup: true
                     }).catch(() => {});
                 }
@@ -7999,22 +7714,11 @@
                     await db.collection('notifications').add({
                         userId: admEditUserId,
                         title: '🎖️ Promotion!',
-                        message: `অভিনন্দন! আপনাকে ${bInfo.label} ব্যাচ দেওয়া হয়েছে।`,
+                        message: `অভিনন্দন! আপনাকে ${bInfo.label} ব্যাচ দেওয়া হয়েছে।`,
                         read: false,
                         createdAt: now,
-                        sentBy: currentUser.uid,
+                        sentBy: currentAdmin.uid,
                         isPopup: true
-                    }).catch(() => {});
-                }
-
-                if (nameChanged) {
-                    await db.collection('notifications').add({
-                        userId: admEditUserId,
-                        title: '✏️ Profile Name Updated',
-                        message: `An admin has updated your display name to "${name}".`,
-                        read: false,
-                        createdAt: now,
-                        sentBy: currentUser.uid
                     }).catch(() => {});
                 }
 
@@ -8152,7 +7856,7 @@
 
         async function admLoadNotifHistory() {
             const el = $('notif-history');
-            el.innerHTML = skeletonListHTML(5);
+            el.innerHTML = loadingHTML();
             try {
                 const snap = await db.collection('notifications').orderBy('createdAt', 'desc').limit(20).get();
                 if (snap.empty) {
