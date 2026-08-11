@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Merriweather+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <meta name="app-version" content="4.1.0">
+    <meta name="app-version" content="5.0.0">
     <link rel="manifest" href="./manifest.json">
     <link rel="apple-touch-icon" href="./icon-192.png">
 
@@ -1648,7 +1648,8 @@
         /* ── POST CARDS ── */
         .post-card-img-wrap {
             position: relative;
-            overflow: hidden
+            overflow: hidden;
+            height: 220px
         }
 
         .post-card-img {
@@ -1662,6 +1663,25 @@
 
         .post-card:hover .post-card-img {
             transform: scale(1.02)
+        }
+
+        .pc-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            background: var(--bg2);
+            opacity: 0;
+            transition: opacity .7s ease;
+            z-index: 0
+        }
+
+        .pc-slide.active {
+            opacity: 1;
+            z-index: 1
         }
 
         .post-card-img-empty {
@@ -3399,14 +3419,18 @@
             flex: 1;
             background: var(--bg2);
             border: 1.5px solid var(--border);
-            border-radius: 50px;
+            border-radius: 20px;
             padding: 10px 18px;
             font-size: 15px;
             font-family: var(--fb);
             color: var(--t1);
             outline: none;
             transition: border-color .2s;
-            font-weight: 400
+            font-weight: 400;
+            resize: none;
+            line-height: 1.35;
+            max-height: 74px;
+            overflow-y: auto;
         }
 
         .chat-input:focus {
@@ -3946,6 +3970,93 @@
             white-space: nowrap;
         }
 
+        /* ── Admin: removable image/link trim UI (approval-time & post-approval) ── */
+        .pm-img-thumb {
+            position: relative;
+            display: inline-block;
+        }
+
+        .pm-img-thumb img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 12px;
+            background: var(--bg2);
+            display: block;
+        }
+
+        .pm-img-thumb.removed img {
+            opacity: .25;
+            filter: grayscale(1);
+        }
+
+        .pm-img-x {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid var(--card);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .pm-img-thumb.removed .pm-img-x {
+            background: var(--success);
+        }
+
+        .pm-link-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            background: var(--bg2);
+            margin-bottom: 8px;
+        }
+
+        .pm-link-row.removed {
+            opacity: .45;
+            text-decoration: line-through;
+        }
+
+        .pm-link-info {
+            flex: 1;
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--t2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pm-link-x {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--danger-light);
+            color: var(--danger);
+            border: none;
+            flex-shrink: 0;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .pm-link-row.removed .pm-link-x {
+            background: rgba(5, 150, 105, .12);
+            color: var(--success);
+        }
+
         .adm-activity-item {
             display: flex;
             align-items: flex-start;
@@ -4186,10 +4297,367 @@
             padding: 4px 2px;
             font-weight: 600
         }
+
+        /* ═══════════════════════════════════
+           NOTIFICATION BUMP (feature 2)
+        ═══════════════════════════════════ */
+        #bump-stack {
+            position: fixed;
+            top: 12px;
+            left: 0;
+            right: 0;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            padding: 0 12px;
+        }
+
+        .bump-card {
+            pointer-events: auto;
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            box-shadow: var(--sh3);
+            color: #fff;
+            transform: translateY(-140%);
+            opacity: 0;
+            transition: transform .38s cubic-bezier(.16, 1, .3, 1), opacity .3s;
+            cursor: pointer;
+        }
+
+        .bump-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .bump-card.bump-message {
+            background: linear-gradient(135deg, #1246d6 0%, #4c2fd6 100%);
+        }
+
+        .bump-card.bump-admin {
+            background: linear-gradient(135deg, #d97706 0%, #dc2626 100%);
+        }
+
+        .bump-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .bump-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bump-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bump-title {
+            font-size: 12.5px;
+            font-weight: 800;
+            font-family: var(--fd);
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bump-msg {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: .92;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ═══════════════════════════════════
+           LOAD MORE (feature 3)
+        ═══════════════════════════════════ */
+        .load-more-btn {
+            display: block;
+            width: 100%;
+            margin: 14px 0 6px;
+            padding: 13px;
+            border-radius: var(--radius-sm);
+            border: 1.5px dashed var(--border);
+            background: var(--bg2);
+            color: var(--accent);
+            font-weight: 800;
+            font-family: var(--fb);
+            font-size: 13.5px;
+            cursor: pointer;
+        }
+
+        .load-more-btn:disabled {
+            opacity: .6;
+        }
+
+        /* ═══════════════════════════════════
+           MESSAGES UI UPGRADE (feature 5)
+        ═══════════════════════════════════ */
+        .msg-thread-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            box-shadow: var(--sh1);
+        }
+
+        .msg-avatar-click,
+        .msg-name-click {
+            cursor: pointer;
+        }
+
+        .msg-avatar-click:hover {
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .msg-name-click:hover {
+            text-decoration: underline;
+            color: var(--accent);
+        }
+
+        .chat-hdr-clickable {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-hdr-clickable:active {
+            opacity: .8;
+        }
+
+        /* ═══════════════════════════════════
+           REPORT SYSTEM (feature 6)
+        ═══════════════════════════════════ */
+        .report-reason-opt {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--t1);
+        }
+
+        .report-reason-opt.active {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .report-reason-opt .rr-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .report-reason-opt.active .rr-dot {
+            border-color: var(--accent);
+        }
+
+        .report-reason-opt.active .rr-dot::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .adm-report-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .adm-report-row:active {
+            background: var(--bg2);
+        }
+
+        .chip-report {
+            background: rgba(220, 38, 38, .12);
+            color: var(--danger);
+        }
+
+        .chip-resolved {
+            background: rgba(5, 150, 105, .12);
+            color: var(--success);
+        }
+
+        /* ═══════════════════════════════════
+           BAN SYSTEM (feature 7)
+        ═══════════════════════════════════ */
+        .ban-duration-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ban-dur-btn {
+            padding: 9px 6px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--bg2);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--t2);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .ban-dur-btn.active {
+            border-color: var(--danger);
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .ban-countdown {
+            font-family: var(--fd);
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--danger);
+            margin-top: 10px;
+            letter-spacing: .5px;
+        }
+
+        /* ═══════════════════════════════════
+           COVER PHOTO (feature 8)
+        ═══════════════════════════════════ */
+        .cover-photo-wrap {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, rgba(18, 70, 214, .18), rgba(109, 40, 217, .18));
+            overflow: hidden;
+        }
+
+        .cover-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-hero.has-cover {
+            padding-top: 0;
+            margin-top: -50px;
+        }
+
+        .profile-hero.has-cover .avatar {
+            border-width: 4px;
+            box-shadow: 0 8px 24px rgba(6, 14, 36, .35);
+        }
+
+        .cover-upload-preview {
+            width: 100%;
+            height: 110px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            display: none;
+            margin-bottom: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .cover-upload-placeholder {
+            width: 100%;
+            height: 110px;
+            border-radius: var(--radius-sm);
+            background: var(--bg2);
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--t3);
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        /* ═══════════════════════════════════
+           DOUBLE TAP TO LIKE (feature 9)
+        ═══════════════════════════════════ */
+        .dtl-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 90px;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, .35);
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+        }
+
+        .dtl-heart.pop {
+            animation: dtlPop .85s cubic-bezier(.17, .89, .32, 1.28);
+        }
+
+        @keyframes dtlPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            25% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 1;
+            }
+
+            45% {
+                transform: translate(-50%, -50%) scale(.95);
+                opacity: 1;
+            }
+
+            80% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- ══ NOTIFICATION BUMPS (feature 2) ══ -->
+    <div id="bump-stack"></div>
 
     <!-- ══ LOADING ══ -->
     <div id="loading-screen">
@@ -4203,7 +4671,7 @@
                 </span>
             </div>
             <div class="loading-sub" style="margin-top:6px">Loading your experience…</div>
-            <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--grd);padding:3px 12px;border-radius:50px;box-shadow:0 4px 12px rgba(18,70,214,.3)"><span style="color:#fff;font-weight:800;font-size:11px;font-family:var(--fd)">APK v4.1.0</span></div>
+            <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--grd);padding:3px 12px;border-radius:50px;box-shadow:0 4px 12px rgba(18,70,214,.3)"><span style="color:#fff;font-weight:800;font-size:11px;font-family:var(--fd)">APK v5.0.0</span></div>
         </div>
         <div class="spin"></div>
     </div>
@@ -4214,9 +4682,9 @@
             <i class="fas fa-ban" style="font-size:34px;color:var(--danger)"></i>
         </div>
         <h2 style="font-size:24px;font-weight:900;color:var(--t1);font-family:var(--fd)">Account Banned</h2>
-        <p style="font-size:14px;color:var(--t2);max-width:300px;line-height:1.6">Your account has been suspended. Please contact support.</p>
-        <button class="btn btn-danger" onclick="doLogout()" style="margin-top:16px"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-        <a href="https://t.me/annonymous707" target="_blank" class="btn btn-ghost" style="margin-top:10px; color:var(--t2); border-color:var(--border); text-decoration:none;">
+        <p style="font-size:14px;color:var(--t2);max-width:300px;line-height:1.6" id="banned-screen-msg">Your account has been suspended. Please contact support.</p>
+        <div class="ban-countdown hidden" id="banned-countdown"></div>
+        <a href="https://t.me/annonymous707" target="_blank" class="btn btn-ghost" style="margin-top:16px; color:var(--t2); border-color:var(--border); text-decoration:none;">
             <i class="fab fa-telegram" style="color:#0088cc"></i> Contact Helpline
         </a>
     </div>
@@ -4293,7 +4761,7 @@
                         <span class="bt-mods">Mods</span>
                         <span class="bt-hub">Hub</span>
                     </span>
-                    <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--accent);color:#fff;-webkit-text-fill-color:#fff;font-family:var(--fb);letter-spacing:.04em;flex-shrink:0;margin-left:2px;">v4.1.0</span>
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--accent);color:#fff;-webkit-text-fill-color:#fff;font-family:var(--fb);letter-spacing:.04em;flex-shrink:0;margin-left:2px;">v5.0.0</span>
                 </button>
 
                 <div class="topbar-actions">
@@ -4522,6 +4990,16 @@
                             <div class="upload-progress-label" id="profile-upload-status">Uploading…</div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <label class="fl">Cover Photo</label>
+                        <img id="ep-cover-preview" src="" class="cover-upload-preview">
+                        <div id="ep-cover-placeholder" class="cover-upload-placeholder"><i class="fas fa-image"></i></div>
+                        <input type="file" id="ep-cover-file" accept="image/*" class="inp" style="padding:12px" onchange="previewCoverPhoto(this)">
+                        <div class="upload-progress-wrap" id="cover-upload-progress">
+                            <progress id="cover-upload-bar" value="0" max="100"></progress>
+                            <div class="upload-progress-label" id="cover-upload-status">Uploading…</div>
+                        </div>
+                    </div>
                     <div class="social-section">
                         <div class="social-section-title"><i class="fas fa-share-alt"></i> Social Links</div>
                         <div class="social-item">
@@ -4576,6 +5054,7 @@
                 <div class="tab-row">
                     <button id="lb-w-btn" class="tab-btn active" onclick="loadLB('weekly',this)"><i class="fas fa-calendar-week"></i> This Week</button>
                     <button id="lb-a-btn" class="tab-btn" onclick="loadLB('alltime',this)"><i class="fas fa-infinity"></i> All Time</button>
+                    <button id="lb-m-btn" class="tab-btn" onclick="loadLB('members',this)"><i class="fas fa-medal"></i> Members</button>
                 </div>
                 <div id="lb-content" style="padding:12px"></div>
             </div>
@@ -4622,17 +5101,19 @@
             <div id="chat-view">
                 <div class="chat-hdr">
                     <button class="back-btn" onclick="closeChat()"><i class="fas fa-arrow-left"></i></button>
-                    <img id="chat-other-avatar" class="avatar" style="width:40px;height:40px" src="">
-                    <div class="chat-hdr-info">
-                        <div class="chat-hdr-name" id="chat-other-name">User</div>
-                        <div class="chat-hdr-status" id="chat-status-text">● Online</div>
+                    <div class="chat-hdr-clickable" onclick="currentChatOther && viewUser(currentChatOther.id)">
+                        <img id="chat-other-avatar" class="avatar" style="width:40px;height:40px" src="">
+                        <div class="chat-hdr-info">
+                            <div class="chat-hdr-name" id="chat-other-name">User</div>
+                            <div class="chat-hdr-status" id="chat-status-text">● Online</div>
+                        </div>
                     </div>
                 </div>
                 <div class="chat-messages" id="chat-messages"></div>
                 <div class="chat-input-bar">
                     <button class="chat-attach-btn" onclick="$('chat-img-inp').click()" title="Send photo"><i class="fas fa-image"></i></button>
                     <input type="file" id="chat-img-inp" accept="image/*" class="hidden" onchange="handleChatImageSelect(this.files[0])">
-                    <input class="chat-input" id="chat-inp" type="text" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()">
+                    <textarea class="chat-input" id="chat-inp" rows="1" placeholder="Type a message…" oninput="autoGrowChatInput(this)" onkeydown="handleChatInputKeydown(event)"></textarea>
                     <button class="chat-send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
@@ -4647,6 +5128,7 @@
                     <button class="adm-tab-btn active" id="adm-nav-dashboard" onclick="adminNavTo('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
                     <button class="adm-tab-btn" id="adm-nav-posts" onclick="adminNavTo('posts')"><i class="fas fa-file-alt"></i> Posts <span id="adm-pending-badge" class="adm-tab-badge hidden">0</span></button>
                     <button class="adm-tab-btn" id="adm-nav-users" onclick="adminNavTo('users')"><i class="fas fa-users"></i> Users</button>
+                    <button class="adm-tab-btn" id="adm-nav-reports" onclick="adminNavTo('reports')"><i class="fas fa-flag"></i> Reports <span id="adm-reports-badge" class="adm-tab-badge hidden">0</span></button>
                     <button class="adm-tab-btn" id="adm-nav-notifications" onclick="adminNavTo('notifications')"><i class="fas fa-bell"></i> Notify</button>
                     <button class="adm-tab-btn" id="adm-nav-messages" onclick="adminNavTo('messages')"><i class="fas fa-comments"></i> Chats</button>
                 </div>
@@ -4754,6 +5236,16 @@
                         <div class="adm-sec-title" style="padding:0 0 10px">Recent Notifications Sent</div>
                         <div id="notif-history"></div>
                     </div>
+                </div>
+
+                <!-- Reports Monitor -->
+                <div id="adm-reports-view" class="adm-sub">
+                    <div class="adm-tab-row no-sb" style="position:static;top:auto">
+                        <button class="adm-tab-btn active" data-rt="pending" onclick="admSetReportTab(this)">🚩 Pending</button>
+                        <button class="adm-tab-btn" data-rt="resolved" onclick="admSetReportTab(this)">✅ Resolved</button>
+                        <button class="adm-tab-btn" data-rt="all" onclick="admSetReportTab(this)">🗂 All</button>
+                    </div>
+                    <div id="reports-content"></div>
                 </div>
 
                 <!-- Messages Monitor -->
@@ -4877,6 +5369,41 @@
         </div>
     </div>
 
+    <!-- ══ REPORT POST MODAL (feature 6) ══ -->
+    <div id="report-modal" class="modal-backdrop hidden">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div style="font-size:19px;font-weight:800;margin-bottom:4px;color:var(--t1);font-family:var(--fd)"><i class="fas fa-flag" style="color:var(--danger)"></i> Report Post</div>
+            <div id="report-post-title-lbl" style="font-size:12.5px;color:var(--t3);margin-bottom:16px;font-weight:600"></div>
+            <div id="report-reason-list">
+                <div class="report-reason-opt active" data-reason="Spam or misleading" onclick="selectReportReason(this)">
+                    <div class="rr-dot"></div><span>Spam or misleading</span>
+                </div>
+                <div class="report-reason-opt" data-reason="Inappropriate content" onclick="selectReportReason(this)">
+                    <div class="rr-dot"></div><span>Inappropriate content</span>
+                </div>
+                <div class="report-reason-opt" data-reason="Copyright / stolen work" onclick="selectReportReason(this)">
+                    <div class="rr-dot"></div><span>Copyright / stolen work</span>
+                </div>
+                <div class="report-reason-opt" data-reason="Broken / fake download link" onclick="selectReportReason(this)">
+                    <div class="rr-dot"></div><span>Broken / fake download link</span>
+                </div>
+                <div class="report-reason-opt" data-reason="Other" onclick="selectReportReason(this)">
+                    <div class="rr-dot"></div><span>Other (write below)</span>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="fl">Additional details (optional)</label>
+                <textarea id="report-details" class="inp" rows="3" placeholder="Describe the issue…" maxlength="500"></textarea>
+            </div>
+            <input type="hidden" id="report-post-id">
+            <div style="display:flex;gap:10px;margin-top:6px">
+                <button class="btn btn-ghost" style="flex:1" onclick="$('report-modal').classList.add('hidden')"><i class="fas fa-times"></i> Cancel</button>
+                <button class="btn btn-danger" style="flex:1" id="report-submit-btn" onclick="submitReport()"><i class="fas fa-flag"></i> Submit Report</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ══ ADMIN: USER EDIT MODAL ══ -->
     <div id="user-modal" class="modal-backdrop hidden">
         <div class="modal-sheet">
@@ -4914,7 +5441,18 @@
                 <div class="adm-toggle" id="user-modal-ban-toggle"></div>
                 <div>
                     <div style="font-size:13.5px;font-weight:700;color:var(--t1)">Ban this user</div>
-                    <div style="font-size:12px;color:var(--t3)">Banned users cannot log in or post</div>
+                    <div style="font-size:12px;color:var(--t3)">Banned users cannot log in, post, or sign out to switch accounts</div>
+                </div>
+            </div>
+            <div id="ban-duration-wrap" style="display:none">
+                <label class="fl" style="margin-top:10px">Ban Duration</label>
+                <div class="ban-duration-row">
+                    <div class="ban-dur-btn" data-h="1" onclick="selectBanDuration(this)">1 Hour</div>
+                    <div class="ban-dur-btn" data-h="24" onclick="selectBanDuration(this)">1 Day</div>
+                    <div class="ban-dur-btn" data-h="72" onclick="selectBanDuration(this)">3 Days</div>
+                    <div class="ban-dur-btn" data-h="168" onclick="selectBanDuration(this)">7 Days</div>
+                    <div class="ban-dur-btn" data-h="720" onclick="selectBanDuration(this)">30 Days</div>
+                    <div class="ban-dur-btn active" data-h="0" onclick="selectBanDuration(this)">Permanent</div>
                 </div>
             </div>
             <div style="display:flex;gap:10px">
@@ -4955,6 +5493,14 @@
                     <option value="approved">✅ Approved</option>
                     <option value="rejected">❌ Rejected</option>
                 </select>
+            </div>
+            <div class="form-row">
+                <label class="fl">Images <span style="color:var(--t3);font-weight:500">(tap × to remove)</span></label>
+                <div id="pm-images-list" class="adm-review-gallery" style="position:relative"></div>
+            </div>
+            <div class="form-row">
+                <label class="fl">Download Links <span style="color:var(--t3);font-weight:500">(tap × to remove)</span></label>
+                <div id="pm-links-list"></div>
             </div>
             <div id="pm-edit-diff" style="display:none">
                 <div class="adm-sec-title" style="padding:0 0 10px">⚠️ Pending Edit Request</div>
@@ -5136,6 +5682,105 @@
         let recentSearches = JSON.parse(localStorage.getItem('bmh-rs') || '[]');
         let featuredPostIds = []; // Featured এ থাকা পোস্টের আইডিগুলো এখানে সেভ থাকবে
         const $ = id => document.getElementById(id);
+
+        /* ═══════════════════════════════════
+           SOUND EFFECTS (feature 1)
+        ═══════════════════════════════════ */
+        let _audioCtx = null;
+
+        function _getAudioCtx() {
+            if (!_audioCtx) {
+                try {
+                    _audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    return null
+                }
+            }
+            if (_audioCtx.state === 'suspended') _audioCtx.resume().catch(() => {});
+            return _audioCtx;
+        }
+
+        function playPopSound() {
+            try {
+                const ctx = _getAudioCtx();
+                if (!ctx) return;
+                const t0 = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(720, t0);
+                osc.frequency.exponentialRampToValueAtTime(420, t0 + 0.09);
+                gain.gain.setValueAtTime(0.0001, t0);
+                gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.13);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(t0);
+                osc.stop(t0 + 0.14);
+            } catch (e) {}
+        }
+
+        function playNotifSound() {
+            try {
+                const ctx = _getAudioCtx();
+                if (!ctx) return;
+                const t0 = ctx.currentTime;
+                [660, 880].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, t0 + i * 0.09);
+                    gain.gain.setValueAtTime(0.0001, t0 + i * 0.09);
+                    gain.gain.exponentialRampToValueAtTime(0.2, t0 + i * 0.09 + 0.015);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.09 + 0.16);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(t0 + i * 0.09);
+                    osc.stop(t0 + i * 0.09 + 0.17);
+                });
+            } catch (e) {}
+        }
+
+        /* Unlock audio on first user interaction (mobile autoplay policies) */
+        document.addEventListener('click', () => {
+            _getAudioCtx();
+        }, {
+            once: true
+        });
+
+        /* ═══════════════════════════════════
+           NOTIFICATION BUMP BANNER (feature 2)
+        ═══════════════════════════════════ */
+        function showBump(type, title, message, opts = {}) {
+            const stack = $('bump-stack');
+            if (!stack) return;
+            const el = document.createElement('div');
+            el.className = `bump-card bump-${type === 'admin' ? 'admin' : 'message'}`;
+            const iconHTML = opts.photo ? `<img src="${opts.photo}" alt="">` : `<i class="fas ${type==='admin'?'fa-bullhorn':'fa-comment-dots'}"></i>`;
+            el.innerHTML = `<div class="bump-icon">${iconHTML}</div><div class="bump-body"><div class="bump-title">${escapeHTML(title)}</div><div class="bump-msg">${escapeHTML(message)}</div></div>`;
+            el.onclick = () => {
+                el.remove();
+                if (opts.onClick) opts.onClick();
+            };
+            stack.appendChild(el);
+            requestAnimationFrame(() => el.classList.add('show'));
+            setTimeout(() => {
+                el.classList.remove('show');
+                setTimeout(() => el.remove(), 400);
+            }, 4200);
+            if (type === 'admin') playNotifSound();
+            else playPopSound();
+        }
+
+
+        function getDeviceId() {
+            let id = localStorage.getItem('bmh_device_id');
+            if (!id) {
+                id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 12);
+                localStorage.setItem('bmh_device_id', id);
+            }
+            return id;
+        }
 
         /* ═══════════════════════════════════
            THEME
@@ -5501,6 +6146,60 @@
         }
 
         /* ═══════════════════════════════════
+           REPORT SYSTEM (feature 6)
+        ═══════════════════════════════════ */
+        let reportSelectedReason = 'Spam or misleading';
+
+        function openReportModal(postId, postTitle) {
+            if (!currentUser) {
+                showToast('Please sign in to report', 'warn');
+                return;
+            }
+            $('report-post-id').value = postId;
+            $('report-post-title-lbl').textContent = 'Reporting: ' + (postTitle || 'this post');
+            $('report-details').value = '';
+            reportSelectedReason = 'Spam or misleading';
+            document.querySelectorAll('.report-reason-opt').forEach((el, i) => el.classList.toggle('active', i === 0));
+            $('report-modal').classList.remove('hidden');
+        }
+
+        function selectReportReason(el) {
+            document.querySelectorAll('.report-reason-opt').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            reportSelectedReason = el.dataset.reason;
+        }
+
+        async function submitReport() {
+            const postId = $('report-post-id').value;
+            const details = $('report-details').value.trim();
+            if (!postId || !currentUser) return;
+            setBtnLoading('report-submit-btn', true);
+            try {
+                let postTitle = '';
+                try {
+                    const pd = await db.collection('posts').doc(postId).get();
+                    if (pd.exists) postTitle = pd.data().title || '';
+                } catch (_) {}
+                await db.collection('reports').add({
+                    postId,
+                    postTitle,
+                    reporterId: currentUser.uid,
+                    reporterName: userProfile?.name || 'Unknown',
+                    reason: reportSelectedReason,
+                    details,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('Report submitted. Thank you! 🚩', 'success');
+                $('report-modal').classList.add('hidden');
+            } catch (e) {
+                showToast('Failed to submit report: ' + e.message, 'error');
+            } finally {
+                setBtnLoading('report-submit-btn', false, '<i class="fas fa-flag"></i> Submit Report');
+            }
+        }
+
+        /* ═══════════════════════════════════
            LIGHTBOX
         ═══════════════════════════════════ */
         function openLightbox(url, imgs) {
@@ -5683,8 +6382,23 @@
                                     ...doc.data()
                                 };
                                 if (userProfile.banned) {
-                                    $('banned-screen').classList.remove('hidden');
-                                    return;
+                                    const banUntil = userProfile.banUntil;
+                                    const stillBanned = !banUntil || (banUntil.toMillis ? banUntil.toMillis() > Date.now() : true);
+                                    if (stillBanned) {
+                                        showBannedScreen(userProfile);
+                                        return;
+                                    } else {
+                                        // ব্যানের মেয়াদ শেষ — অটোমেটিক আনব্যান
+                                        await db.collection('users').doc(user.uid).update({
+                                            banned: false,
+                                            banUntil: null
+                                        }).catch(() => {});
+                                        if (userProfile.deviceId) {
+                                            db.collection('bannedDevices').doc(userProfile.deviceId).delete().catch(() => {});
+                                        }
+                                        userProfile.banned = false;
+                                        userProfile.banUntil = null;
+                                    }
                                 }
                             }
                         } catch (e) {
@@ -5695,6 +6409,7 @@
 
                         initNotifListener();
                         initMsgListener();
+                        startPresence();
                         navTo('home');
                         loadFeaturedMods();
                         loadMarqueeNotice(); // <-- মার্কিউ নোটিশ বোর্ড থেকে সর্বশেষ নোটিশ লোড করার ফাংশন কল করা হলো
@@ -5702,6 +6417,7 @@
                         checkLatestNotice(); // <-- পপ-আপ নোটিশ চেক করার ফাংশন এখানে কল করা হলো
 
                     } else {
+                        stopPresence();
                         currentUser = null;
                         userProfile = null;
                         if (unsubNotif) {
@@ -5723,16 +6439,131 @@
             }
         }
 
+        /* ═══════════════════════════════════
+           PRESENCE (online / last seen)
+        ═══════════════════════════════════ */
+        let presenceInterval = null;
+
+        function startPresence() {
+            if (!currentUser || !db) return;
+            const touch = () => {
+                db.collection('users').doc(currentUser.uid).update({
+                    online: true,
+                    lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(() => {});
+            };
+            touch();
+            if (presenceInterval) clearInterval(presenceInterval);
+            presenceInterval = setInterval(touch, 25000);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && currentUser) touch();
+            });
+            window.addEventListener('beforeunload', () => {
+                if (currentUser && db) {
+                    db.collection('users').doc(currentUser.uid).update({
+                        online: false,
+                        lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+                    }).catch(() => {});
+                }
+            });
+        }
+
+        function stopPresence() {
+            if (presenceInterval) {
+                clearInterval(presenceInterval);
+                presenceInterval = null;
+            }
+            if (currentUser && db) {
+                db.collection('users').doc(currentUser.uid).update({
+                    online: false,
+                    lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(() => {});
+            }
+        }
+
+        /* ═══════════════════════════════════
+           BAN SCREEN + COUNTDOWN (feature 7)
+        ═══════════════════════════════════ */
+        let banCountdownInterval = null;
+
+        function showBannedScreen(profile) {
+            $('banned-screen').classList.remove('hidden');
+            $('app').style.display = 'none';
+            $('auth-screen').classList.add('hidden');
+            const msgEl = $('banned-screen-msg');
+            const cdEl = $('banned-countdown');
+            if (banCountdownInterval) {
+                clearInterval(banCountdownInterval);
+                banCountdownInterval = null;
+            }
+            const banUntilMs = profile.banUntil && profile.banUntil.toMillis ? profile.banUntil.toMillis() : null;
+            if (!banUntilMs) {
+                msgEl.textContent = 'আপনার অ্যাকাউন্ট স্থায়ীভাবে সাসপেন্ড করা হয়েছে। বিস্তারিত জানতে সাপোর্টের সাথে যোগাযোগ করুন।';
+                cdEl.classList.add('hidden');
+                return;
+            }
+            msgEl.textContent = 'আপনার অ্যাকাউন্ট সাময়িকভাবে সাসপেন্ড করা হয়েছে। নিচে সময় শেষ হলে আবার লগইন করতে পারবেন:';
+            cdEl.classList.remove('hidden');
+            const tick = () => {
+                const diff = banUntilMs - Date.now();
+                if (diff <= 0) {
+                    clearInterval(banCountdownInterval);
+                    banCountdownInterval = null;
+                    cdEl.textContent = '00:00:00';
+                    // পেজ রিফ্রেশ করে অটো-আনব্যান চেক করানো
+                    setTimeout(() => location.reload(), 800);
+                    return;
+                }
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                cdEl.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            };
+            tick();
+            banCountdownInterval = setInterval(tick, 1000);
+        }
+
+        /* Best-effort per-device ban check (used at registration to block ban evasion) */
+        async function isDeviceBanned() {
+            try {
+                const devId = getDeviceId();
+                const doc = await db.collection('bannedDevices').doc(devId).get();
+                if (!doc.exists) return null;
+                const data = doc.data();
+                if (data.banUntil && data.banUntil.toMillis && data.banUntil.toMillis() < Date.now()) {
+                    db.collection('bannedDevices').doc(devId).delete().catch(() => {});
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+
+
 
         /* ═══════════════════════════════════
            NOTIFICATION LISTENER
         ═══════════════════════════════════ */
         function initNotifListener() {
             if (!currentUser || !db) return;
+            let firstNotifSnap = true;
             try {
                 unsubNotif = db.collection('notifications').where('userId', '==', currentUser.uid).where('read', '==', false).onSnapshot(snap => {
                     const dot = $('notif-dot');
-                    if (dot) dot.classList.toggle('visible', !snap.empty)
+                    if (dot) dot.classList.toggle('visible', !snap.empty);
+                    if (!firstNotifSnap) {
+                        snap.docChanges().forEach(ch => {
+                            if (ch.type === 'added') {
+                                const n = ch.doc.data();
+                                showBump('admin', n.title || '📢 Notification', n.message || '', {
+                                    onClick: () => navTo('notifications')
+                                });
+                            }
+                        });
+                    }
+                    firstNotifSnap = false;
                 }, err => console.warn(err))
             } catch (e) {
                 console.warn(e)
@@ -5744,6 +6575,8 @@
         ═══════════════════════════════════ */
         function initMsgListener() {
             if (!currentUser || !db) return;
+            let firstChatSnap = true;
+            const lastPreviewCache = {};
             try {
                 db.collection('chats').where('participants', 'array-contains', currentUser.uid).onSnapshot(snap => {
                     let unread = false;
@@ -5754,7 +6587,40 @@
                         }
                     });
                     const dot = $('msg-notif-dot');
-                    if (dot) dot.classList.toggle('visible', unread)
+                    if (dot) dot.classList.toggle('visible', unread);
+
+                    if (!firstChatSnap) {
+                        snap.docChanges().forEach(async ch => {
+                            const data = ch.doc.data();
+                            const isNewIncoming = (ch.type === 'added' || ch.type === 'modified') &&
+                                data.lastSenderId && data.lastSenderId !== currentUser.uid &&
+                                data.lastMessage && lastPreviewCache[ch.doc.id] !== data.lastMessage &&
+                                (!currentChatId || currentChatId !== ch.doc.id);
+                            if (isNewIncoming) {
+                                lastPreviewCache[ch.doc.id] = data.lastMessage;
+                                let senderName = 'New message',
+                                    senderPhoto = '';
+                                try {
+                                    const ud = await db.collection('users').doc(data.lastSenderId).get();
+                                    if (ud.exists) {
+                                        senderName = ud.data().name || senderName;
+                                        senderPhoto = ud.data().photoURL || '';
+                                    }
+                                } catch (_) {}
+                                showBump('message', senderName, data.lastMessage, {
+                                    photo: senderPhoto,
+                                    onClick: () => startChat(data.lastSenderId, senderName, senderPhoto)
+                                });
+                            } else {
+                                lastPreviewCache[ch.doc.id] = data.lastMessage;
+                            }
+                        });
+                    } else {
+                        snap.forEach(d => {
+                            lastPreviewCache[d.id] = d.data().lastMessage;
+                        });
+                    }
+                    firstChatSnap = false;
                 }, err => console.warn(err))
             } catch (e) {
                 console.warn(e)
@@ -5837,15 +6703,26 @@
             if (!ok) return;
             setBtnLoading('rg-btn', true);
             try {
+                const devBan = await isDeviceBanned();
+                if (devBan) {
+                    showToast('এই ডিভাইস থেকে নতুন অ্যাকাউন্ট খোলা যাবে না (ব্যান করা হয়েছে)।', 'error');
+                    setBtnLoading('rg-btn', false, 'Create Account');
+                    return;
+                }
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 await db.collection('users').doc(res.user.uid).set({
                     name,
                     email,
                     photoURL: '',
+                    coverURL: '',
                     dob: '',
                     role: 'user',
                     badge: 'newbie',
                     banned: false,
+                    banUntil: null,
+                    deviceId: getDeviceId(),
+                    online: true,
+                    lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
                     joinDate: firebase.firestore.FieldValue.serverTimestamp(),
                     socialLinks: {
                         facebook: '',
@@ -5866,6 +6743,7 @@
         }
         async function doLogout() {
             try {
+                stopPresence();
                 if (unsubNotif) {
                     unsubNotif();
                     unsubNotif = null
@@ -5886,15 +6764,19 @@
            RENDER CARD
         ═══════════════════════════════════ */
         function renderCard(p) {
-            const img = p.images && p.images[0] ? p.images[0] : '';
+            const imgs = p.images || [];
+            const img = imgs[0] || '';
             const av = p.authorPhoto || makeAvatar(p.authorName);
             const bdg = p.authorBadgeLabel ? `<span class="badge ${p.authorBadgeClass}"><i class="fas ${p.authorBadgeIcon}"></i> ${p.authorBadgeLabel}</span>` : '';
-            const imgCount = p.images ? p.images.length : 0;
+            const imgCount = imgs.length;
             const trending = (p.downloads || 0) > 50;
             const rt = estimateRead(p.description);
+            const imgAreaHTML = imgCount > 1 ?
+                imgs.map((im, i) => `<img src="${im}" class="pc-slide ${i===0?'active':''}" loading="lazy" onerror="this.onerror=null;this.src=makeAvatar('?')">`).join('') :
+                (img ? `<img src="${img}" class="post-card-img" loading="lazy" onerror="this.onerror=null;this.src=makeAvatar('?')">` : `<div class="post-card-img-empty"><i class="fas fa-image"></i></div>`);
             return `<div class="card card-hover post-card" onclick="openPost('${p.id}')">
-    <div class="post-card-img-wrap">
-      ${img?`<img src="${img}" class="post-card-img" loading="lazy" onerror="this.onerror=null;this.src=makeAvatar('?')">`:`<div class="post-card-img-empty"><i class="fas fa-image"></i></div>`}
+    <div class="post-card-img-wrap" ${imgCount>1?'data-multi="1" data-idx="0"':''}>
+      ${imgAreaHTML}
       ${imgCount>1?`<div class="img-count-pill"><i class="fas fa-images"></i> ${imgCount}</div>`:''}
     </div>
     <div class="post-card-body">
@@ -5921,6 +6803,21 @@
   </div>`
         }
 
+        /* Optimized Auto-Slide: Only runs when the user is on the Home page */
+        setInterval(() => {
+            if (document.getElementById('home-view').classList.contains('active')) {
+                document.querySelectorAll('#home-posts .post-card-img-wrap[data-multi="1"]').forEach(wrap => {
+                    const slides = wrap.querySelectorAll('.pc-slide');
+                    if (slides.length < 2) return;
+                    let idx = parseInt(wrap.dataset.idx || '0');
+                    slides[idx].classList.remove('active');
+                    idx = (idx + 1) % slides.length;
+                    slides[idx].classList.add('active');
+                    wrap.dataset.idx = idx;
+                });
+            }
+        }, 4000); // ৩ সেকেন্ডের বদলে ৪ সেকেন্ড করা হলো যাতে ল্যাগ কম হয়
+
 
         /* ═══════════════════════════════════
            HOME
@@ -5928,27 +6825,39 @@
         /* ═══════════════════════════════════
            HOME & FEATURED MODS
         ═══════════════════════════════════ */
+        let homeLastDoc = null,
+            homeHasMore = true,
+            homeLoadingMore = false;
+        const HOME_PAGE_SIZE = 24;
+
+        function _homeBaseQuery() {
+            let q = db.collection('posts').where('status', '==', 'approved');
+            if (currentCat !== 'All') q = q.where('category', '==', currentCat);
+            if (currentSort === 'popular') q = q.orderBy('views', 'desc');
+            else if (currentSort === 'downloads') q = q.orderBy('downloads', 'desc');
+            else if (currentSort === 'liked') q = q.orderBy('likes', 'desc');
+            else q = q.orderBy('createdAt', 'desc');
+            return q;
+        }
+
         async function loadHome() {
             $('home-loading').style.display = 'block';
             $('home-posts').innerHTML = '';
             $('home-empty').style.display = 'none';
+            homeLastDoc = null;
+            homeHasMore = true;
             try {
-                let q = db.collection('posts').where('status', '==', 'approved');
-                if (currentCat !== 'All') q = q.where('category', '==', currentCat);
-                if (currentSort === 'newest') q = q.orderBy('createdAt', 'desc');
-                else if (currentSort === 'popular') q = q.orderBy('views', 'desc');
-                else if (currentSort === 'downloads') q = q.orderBy('downloads', 'desc');
-                else if (currentSort === 'liked') q = q.orderBy('likes', 'desc');
-                else q = q.orderBy('createdAt', 'desc');
-                const snap = await q.limit(50).get();
+                let q = _homeBaseQuery().limit(HOME_PAGE_SIZE);
+                const snap = await q.get();
                 $('home-loading').style.display = 'none';
                 if (snap.empty) {
                     $('home-empty').style.display = 'flex';
+                    homeHasMore = false;
                     return;
                 }
-                let html = '<div class="post-grid">';
+                let html = '<div class="post-grid" id="home-post-grid">';
                 snap.forEach(d => {
-                    // স্লাইডারে থাকা পোস্টগুলো যেন নিচে আবার না দেখায়
+                    // স্লাইডারে থাকা পোস্টগুলো যেন নিচে আবার না দেখায়
                     if (currentCat === 'All' && currentSort === 'newest' && featuredPostIds.includes(d.id)) {
                         return;
                     }
@@ -5959,10 +6868,54 @@
                 });
                 html += '</div>';
                 $('home-posts').innerHTML = html;
+                homeLastDoc = snap.docs[snap.docs.length - 1];
+                homeHasMore = snap.docs.length === HOME_PAGE_SIZE;
+                _renderHomeLoadMoreBtn();
             } catch (e) {
                 $('home-loading').style.display = 'none';
                 console.error(e);
                 showToast('Failed to load posts', 'error');
+            }
+        }
+
+        function _renderHomeLoadMoreBtn() {
+            const old = document.getElementById('home-load-more-btn');
+            if (old) old.remove();
+            if (!homeHasMore) return;
+            const btn = document.createElement('button');
+            btn.id = 'home-load-more-btn';
+            btn.className = 'load-more-btn';
+            btn.innerHTML = '<i class="fas fa-arrow-down"></i> Load More Mods';
+            btn.onclick = loadMoreHome;
+            $('home-posts').insertAdjacentElement('afterend', btn);
+        }
+
+        async function loadMoreHome() {
+            if (!homeHasMore || homeLoadingMore || !homeLastDoc) return;
+            homeLoadingMore = true;
+            const btn = document.getElementById('home-load-more-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="spin spin-sm" style="display:inline-block"></div> Loading…';
+            }
+            try {
+                const snap = await _homeBaseQuery().startAfter(homeLastDoc).limit(HOME_PAGE_SIZE).get();
+                const grid = document.getElementById('home-post-grid');
+                snap.forEach(d => {
+                    if (currentCat === 'All' && currentSort === 'newest' && featuredPostIds.includes(d.id)) return;
+                    if (grid) grid.insertAdjacentHTML('beforeend', renderCard({
+                        id: d.id,
+                        ...d.data()
+                    }));
+                });
+                if (snap.docs.length) homeLastDoc = snap.docs[snap.docs.length - 1];
+                homeHasMore = snap.docs.length === HOME_PAGE_SIZE;
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to load more posts', 'error');
+            } finally {
+                homeLoadingMore = false;
+                _renderHomeLoadMoreBtn();
             }
         }
 
@@ -5998,7 +6951,7 @@
                 const snap = await db.collection('posts')
                     .where('status', '==', 'approved')
                     .orderBy('createdAt', 'desc')
-                    .limit(25)
+                    .limit(60)
                     .get();
 
                 if (snap.empty) {
@@ -6012,17 +6965,17 @@
                     ...doc.data()
                 }));
 
-                postsArr.sort((a, b) => {
-                    let aIsAdmin = (a.authorBadgeLabel === 'Admin' || a.authorBadgeClass === 'b-admin' || a.role === 'admin') ? 1 : 0;
-                    let bIsAdmin = (b.authorBadgeLabel === 'Admin' || b.authorBadgeClass === 'b-admin' || b.role === 'admin') ? 1 : 0;
+                // শুধুমাত্র এডমিনদের পোস্ট — অন্য কারো পোস্ট স্লাইডারে থাকবে না
+                postsArr = postsArr.filter(p => p.authorBadgeLabel === 'Admin' || p.authorBadgeClass === 'b-admin' || p.role === 'admin');
 
-                    if (aIsAdmin !== bIsAdmin) {
-                        return bIsAdmin - aIsAdmin;
-                    }
-                    return (b.downloads || 0) - (a.downloads || 0);
-                });
+                postsArr.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
 
-                postsArr = postsArr.slice(0, 10);
+                postsArr = postsArr.slice(0, 12);
+
+                if (!postsArr.length) {
+                    wrapper.style.display = 'none';
+                    return;
+                }
 
                 wrapper.style.display = 'block';
                 let html = '';
@@ -6183,7 +7136,7 @@
                 const msgBtn = (!isOwner && p.authorId) ? `<button onclick="startChat('${p.authorId}','${(p.authorName||'').replace(/'/g,"\\'")}','${p.authorPhoto||''}')" class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px"><i class="fas fa-comment-dots"></i> Message Poster</button>` : '';
                 const promoBtnHTML = (p.promoLink && isValidUrl(p.promoLink)) ? `<a href="${p.promoLink}" target="_blank" rel="noopener" class="btn btn-ghost btn-full" style="margin-top:10px; border:1.5px dashed var(--accent); color:var(--accent)"><i class="fas fa-external-link-alt"></i> Promotional Link / Video</a>` : '';
                 $('detail-content').innerHTML = `
-      ${imgs[0]?`<div style="position:relative"><img src="${imgs[0]}" class="detail-hero" onerror="onImgError(this)" onclick="openLightbox('${imgs[0]}',${imgsJSON})">${imgs.length>1?`<div class="img-count-pill"><i class="fas fa-images"></i> ${imgs.length} photos</div>`:''}</div>`:`<div class="detail-hero-empty"><i class="fas fa-image"></i></div>`}
+      ${imgs[0]?`<div style="position:relative" class="dtl-wrap" ondblclick="doubleTapLike('${p.id}', this, event)"><img src="${imgs[0]}" class="detail-hero" onerror="onImgError(this)" onclick="openLightbox('${imgs[0]}',${imgsJSON})"><div class="dtl-heart"><i class="fas fa-heart"></i></div>${imgs.length>1?`<div class="img-count-pill"><i class="fas fa-images"></i> ${imgs.length} photos</div>`:''}</div>`:`<div class="detail-hero-empty"><i class="fas fa-image"></i></div>`}
       <div class="detail-body">
         <div>
           ${trending?`<span class="trending-badge" style="margin-bottom:10px;display:inline-flex"><i class="fas fa-fire"></i> Trending</span>`:''}
@@ -6199,6 +7152,7 @@
           <button id="like-btn" onclick="toggleLike('${p.id}')" class="dab ${isLiked?'liked':''}"><div class="dab-icon"><i class="fas fa-heart"></i></div><div class="dab-label">${isLiked?'Liked':'Like'} (${p.likes||0})</div></button>
           <button id="save-btn" onclick="toggleSave('${p.id}')" class="dab ${isSaved?'saved':''}"><div class="dab-icon"><i class="fas fa-bookmark"></i></div><div class="dab-label">${isSaved?'Saved':'Save'}</div></button>
           <button onclick="openShareSheet('${p.id}')" class="dab"><div class="dab-icon"><i class="fas fa-share-alt"></i></div><div class="dab-label">Share</div></button>
+          ${!isOwner?`<button onclick="openReportModal('${p.id}','${(p.title||'').replace(/'/g,"\\'")}')" class="dab"><div class="dab-icon"><i class="fas fa-flag"></i></div><div class="dab-label">Report</div></button>`:''}
         </div>
         <div class="author-card" onclick="viewUser('${p.authorId}')">
           <img src="${av}" class="avatar" style="width:54px;height:54px" data-name="${p.authorName||''}" onerror="onImgError(this)">
@@ -6259,6 +7213,51 @@
                 if (btn) btn.style.opacity = '1'
             }
         }
+
+        /* Instagram-style double tap to like (feature 9) */
+        async function doubleTapLike(pid, wrapEl, ev) {
+            if (ev) ev.preventDefault();
+            const heart = wrapEl.querySelector('.dtl-heart');
+            if (heart) {
+                heart.classList.remove('pop');
+                void heart.offsetWidth; // force reflow to restart animation
+                heart.classList.add('pop');
+            }
+            if (!currentUser) return;
+            try {
+                const ref = db.collection('posts').doc(pid);
+                const doc = await ref.get();
+                if (!doc.exists) return;
+                const liked = (doc.data().likedBy || []).includes(currentUser.uid);
+                if (!liked) {
+                    await ref.update({
+                        likedBy: firebase.firestore.FieldValue.arrayUnion(currentUser.uid),
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    _bumpLikeUIAfterDoubleTap();
+                }
+            } catch (e) {}
+        }
+
+        function _bumpLikeUIAfterDoubleTap() {
+            const likeBtn = $('like-btn');
+            if (likeBtn && !likeBtn.classList.contains('liked')) {
+                likeBtn.classList.add('liked');
+                const label = likeBtn.querySelector('.dab-label');
+                if (label) {
+                    const m = label.textContent.match(/\((\d+)\)/);
+                    const cur = m ? parseInt(m[1]) : 0;
+                    label.textContent = `Liked (${cur+1})`;
+                }
+            }
+            document.querySelectorAll('.detail-stats span').forEach(span => {
+                if (span.innerHTML.includes('fa-heart')) {
+                    const m = span.textContent.match(/(\d+)/);
+                    if (m) span.innerHTML = span.innerHTML.replace(/\d+/, parseInt(m[1]) + 1);
+                }
+            });
+        }
+
         async function toggleSave(pid) {
             const btn = $('save-btn');
             if (btn) btn.style.opacity = '.5';
@@ -6438,8 +7437,12 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
             else {
-                const b = type === 'weekly' ? $('lb-w-btn') : $('lb-a-btn');
+                const b = type === 'weekly' ? $('lb-w-btn') : type === 'members' ? $('lb-m-btn') : $('lb-a-btn');
                 if (b) b.classList.add('active')
+            }
+            if (type === 'members') {
+                await loadMembersDirectory();
+                return;
             }
             const content = $('lb-content');
             content.innerHTML = loadingHTML();
@@ -6504,6 +7507,72 @@
                 content.innerHTML = `<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3></div>`
             }
         }
+
+        /* ═══════════════════════════════════
+           MEMBERS DIRECTORY (admins + badge holders, ranked)
+        ═══════════════════════════════════ */
+        const RANK_ORDER = {
+            admin: 5,
+            legend: 4,
+            veteran: 3,
+            regular: 2,
+            rookie: 1,
+            newbie: 0
+        };
+
+        async function loadMembersDirectory() {
+            const content = $('lb-content');
+            content.innerHTML = loadingHTML('Loading members…');
+            try {
+                const snap = await db.collection('users').get();
+                const members = [];
+                snap.forEach(d => {
+                    const u = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    const isAdmin = u.role === 'admin' || u.badge === 'admin';
+                    const rankKey = isAdmin ? 'admin' : (u.badge || 'newbie');
+                    if (rankKey === 'newbie') return; // newbie বাদ
+                    members.push({
+                        ...u,
+                        rankKey,
+                        rankVal: RANK_ORDER[rankKey] ?? 0
+                    });
+                });
+                members.sort((a, b) => {
+                    if (b.rankVal !== a.rankVal) return b.rankVal - a.rankVal;
+                    return (a.name || '').localeCompare(b.name || '')
+                });
+                if (!members.length) {
+                    content.innerHTML = `<div class="empty"><div class="empty-icon"><i class="fas fa-medal"></i></div><h3>No promoted members yet</h3><p>Admins and badge-holders will appear here.</p></div>`;
+                    return
+                }
+                let html = '<div style="display:flex;flex-direction:column;gap:8px">';
+                members.forEach(u => {
+                    const av = u.photoURL || makeAvatar(u.name);
+                    const bdg = getBadge(u.role, u.badge);
+                    const isMe = currentUser && u.id === currentUser.uid;
+                    html += `<div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+            <img src="${av}" class="avatar msg-avatar-click" style="width:50px;height:50px;flex-shrink:0" data-name="${escapeHTML(u.name||'')}" onerror="onImgError(this)" onclick="viewUser('${u.id}')">
+            <div style="flex:1;min-width:0" class="msg-name-click" onclick="viewUser('${u.id}')">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span style="font-size:14px;font-weight:800;color:var(--t1);font-family:var(--fd)" class="c1">${escapeHTML(u.name||'Unknown')}</span>
+                ${badgeHTML(bdg)}
+              </div>
+              <div style="font-size:11.5px;color:var(--t3);margin-top:2px;font-weight:500">Member since ${fmtDate(u.joinDate)}</div>
+            </div>
+            ${!isMe?`<button class="icon-btn" title="Message" onclick="event.stopPropagation();startChat('${u.id}','${(u.name||'').replace(/'/g,"\\'")}','${u.photoURL||''}')"><i class="fas fa-comment-dots"></i></button>`:''}
+          </div>`
+                });
+                html += '</div>';
+                content.innerHTML = html;
+            } catch (e) {
+                console.error(e);
+                content.innerHTML = `<div class="empty"><h3 style="color:var(--danger)">Failed to load members</h3></div>`
+            }
+        }
+
 
         /* ═══════════════════════════════════
            FAVORITES
@@ -6574,7 +7643,9 @@
                     socHTML += '</div>'
                 }
                 const msgBtn = !isMe ? `<div style="padding:0 16px 10px"><button onclick="startChat('${uid}','${(u.name||'').replace(/'/g,"\\'")}','${u.photoURL||''}')" class="btn btn-outline btn-full"><i class="fas fa-comment-dots"></i> Send Message</button></div>` : '';
-                el.innerHTML = `<div class="user-hero"><img src="${av}" class="avatar" style="width:96px;height:96px;border:3px solid var(--accent);margin-bottom:14px;box-shadow:0 8px 28px rgba(18,70,214,.28)" data-name="${u.name||''}" onerror="onImgError(this)"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:5px"><span style="font-size:24px;font-weight:900;color:var(--t1);letter-spacing:-.4px;font-family:var(--fd)">${u.name||'User'}</span>${badgeHTML(bdg)}</div>${u.dob?`<div style="font-size:12px;color:var(--t3);margin-top:4px;font-weight:500"><i class="fas fa-birthday-cake"></i> ${u.dob}</div>`:''}<div style="font-size:12px;color:var(--t3);margin-top:4px;font-weight:500">Member since ${fmtDate(u.joinDate)}</div>${!isMe?socHTML:''}</div><div class="stat-grid" style="padding:16px">${[['📝',posts.length,'Mods'],['👁️',tv,'Views'],['❤️',tl,'Likes'],['📥',td,'Downloads']].map(([i,v,l])=>`<div class="stat-box"><div class="si">${i}</div><div class="sv">${v}</div><div class="sl">${l}</div></div>`).join('')}</div>${msgBtn}<div style="padding:0 16px 20px">${posts.length?`<div class="sec-div" style="padding:0 0 10px">Published Mods</div>${posts.map(p=>renderCard(p)).join('')}`:`<div class="empty" style="padding:32px 0"><div class="empty-icon"><i class="fas fa-inbox"></i></div><h3>No mods yet</h3></div>`}</div>`
+                const coverHTML = u.coverURL ? `<div class="cover-photo-wrap"><img src="${u.coverURL}" onerror="this.parentElement.style.display='none'"></div>` : '';
+                const heroCls = u.coverURL ? 'user-hero has-cover' : 'user-hero';
+                el.innerHTML = `${coverHTML}<div class="${heroCls}"><img src="${av}" class="avatar" style="width:96px;height:96px;border:3px solid var(--accent);margin-bottom:14px;box-shadow:0 8px 28px rgba(18,70,214,.28)" data-name="${u.name||''}" onerror="onImgError(this)"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:5px"><span style="font-size:24px;font-weight:900;color:var(--t1);letter-spacing:-.4px;font-family:var(--fd)">${u.name||'User'}</span>${badgeHTML(bdg)}</div>${u.dob?`<div style="font-size:12px;color:var(--t3);margin-top:4px;font-weight:500"><i class="fas fa-birthday-cake"></i> ${u.dob}</div>`:''}<div style="font-size:12px;color:var(--t3);margin-top:4px;font-weight:500">Member since ${fmtDate(u.joinDate)}</div>${!isMe?socHTML:''}</div><div class="stat-grid" style="padding:16px">${[['📝',posts.length,'Mods'],['👁️',tv,'Views'],['❤️',tl,'Likes'],['📥',td,'Downloads']].map(([i,v,l])=>`<div class="stat-box"><div class="si">${i}</div><div class="sv">${v}</div><div class="sl">${l}</div></div>`).join('')}</div>${msgBtn}<div style="padding:0 16px 20px">${posts.length?`<div class="sec-div" style="padding:0 0 10px">Published Mods</div>${posts.map(p=>renderCard(p)).join('')}`:`<div class="empty" style="padding:32px 0"><div class="empty-icon"><i class="fas fa-inbox"></i></div><h3>No mods yet</h3></div>`}</div>`
             } catch (e) {
                 el.innerHTML = `<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3></div>`
             }
@@ -6628,7 +7699,9 @@
                     socHTML += '</div>'
                 }
                 const isAdmin = userProfile.role === 'admin' || userProfile.badge === 'admin';
-                $('profile-content').innerHTML = `<div class="profile-hero"><img src="${photo}" class="avatar" style="width:100px;height:100px;border:3px solid var(--accent);margin-bottom:16px;box-shadow:0 8px 30px rgba(18,70,214,.3)" data-name="${userProfile.name||''}" onerror="onImgError(this)"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:7px"><span class="profile-name">${userProfile.name||'User'}</span>${badgeHTML(bdg)}</div><div class="profile-email">${userProfile.email||''}</div>${userProfile.dob?`<div style="font-size:12px;color:var(--t3);margin-top:5px;font-weight:500"><i class="fas fa-birthday-cake"></i> ${userProfile.dob}</div>`:''}<div style="font-size:12px;color:var(--t3);margin-top:5px;font-weight:500">Member since ${fmtDate(userProfile.joinDate)}</div>${socHTML}</div>
+                const coverHTML = userProfile.coverURL ? `<div class="cover-photo-wrap"><img src="${userProfile.coverURL}" onerror="this.parentElement.style.display='none'"></div>` : '';
+                const heroCls = userProfile.coverURL ? 'profile-hero has-cover' : 'profile-hero';
+                $('profile-content').innerHTML = `${coverHTML}<div class="${heroCls}"><img src="${photo}" class="avatar" style="width:100px;height:100px;border:3px solid var(--accent);margin-bottom:16px;box-shadow:0 8px 30px rgba(18,70,214,.3)" data-name="${userProfile.name||''}" onerror="onImgError(this)"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:7px"><span class="profile-name">${userProfile.name||'User'}</span>${badgeHTML(bdg)}</div><div class="profile-email">${userProfile.email||''}</div>${userProfile.dob?`<div style="font-size:12px;color:var(--t3);margin-top:5px;font-weight:500"><i class="fas fa-birthday-cake"></i> ${userProfile.dob}</div>`:''}<div style="font-size:12px;color:var(--t3);margin-top:5px;font-weight:500">Member since ${fmtDate(userProfile.joinDate)}</div>${socHTML}</div>
 <div class="completion-bar-wrap"><div class="completion-label"><span><i class="fas fa-user-check"></i> Profile Completion</span><span style="color:${cs===100?'var(--success)':'var(--accent)'};font-family:var(--fd)">${cs}%</span></div><div class="completion-track"><div class="completion-fill" style="width:${cs}%"></div></div>${cs<100?`<div style="font-size:11px;color:var(--t3);margin-top:6px;font-weight:500"><i class="fas fa-lightbulb"></i> Complete your profile for a better experience</div>`:`<div style="font-size:11px;color:var(--success);margin-top:6px;font-weight:700">🎉 Profile complete!</div>`}</div>
 <div class="stat-grid" style="padding:0 16px 16px">${[['📝',total,'Posts'],['👁️',views,'Views'],['❤️',likes,'Likes'],['📥',dls,'Downloads']].map(([i,v,l])=>`<div class="stat-box"><div class="si">${i}</div><div class="sv">${v}</div><div class="sl">${l}</div></div>`).join('')}</div>
 <div style="display:flex;flex-direction:column;gap:8px;padding:0 16px 16px">${pend>0?`<div class="alert-box alert-warn"><i class="fas fa-clock"></i> ${pend} post${pend>1?'s':''} pending review</div>`:''}${rej>0?`<div class="alert-box alert-danger"><i class="fas fa-times-circle"></i> ${rej} post${rej>1?'s':''} rejected</div>`:''}</div>
@@ -6643,7 +7716,7 @@
   <button onclick="window.open('https://t.me/annonymous707','_blank')" class="btn btn-ghost btn-full"><i class="fab fa-telegram" style="color:#0088cc"></i> Contact Developer</button>
   <button onclick="doLogout()" class="btn btn-full" style="background:var(--danger-light);color:var(--danger);border:1.5px solid rgba(220,38,38,.2)"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
 </div>
-<div class="about-card"><div class="about-card-title"><i class="fas fa-info-circle" style="color:var(--accent)"></i> About Bussid Mods Hub</div><p>A community platform for Bus Simulator Indonesia mod creators and enthusiasts. Share skins, car mods, road mods, templates, and codenames.</p><div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:var(--grd);padding:5px 14px;border-radius:50px;box-shadow:0 4px 14px rgba(18,70,214,.3)"><i class="fas fa-rocket" style="color:#fff;font-size:11px"></i><span style="color:#fff;font-weight:800;font-size:12px;font-family:var(--fd)">Version 4.1.0</span></div></div>`
+<div class="about-card"><div class="about-card-title"><i class="fas fa-info-circle" style="color:var(--accent)"></i> About Bussid Mods Hub</div><p>A community platform for Bus Simulator Indonesia mod creators and enthusiasts. Share skins, car mods, road mods, templates, and codenames.</p><div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:var(--grd);padding:5px 14px;border-radius:50px;box-shadow:0 4px 14px rgba(18,70,214,.3)"><i class="fas fa-rocket" style="color:#fff;font-size:11px"></i><span style="color:#fff;font-weight:800;font-size:12px;font-family:var(--fd)">Version 5.0.0</span></div></div>`
             } catch (e) {
                 $('profile-content').innerHTML = '<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3></div>'
             }
@@ -6657,6 +7730,7 @@
             $('ep-name').value = userProfile.name || '';
             $('ep-dob').value = userProfile.dob || '';
             $('ep-photo-file').value = '';
+            $('ep-cover-file').value = '';
             const s = userProfile.socialLinks || {};
             $('ep-facebook').value = s.facebook || '';
             $('ep-whatsapp').value = s.whatsapp || '';
@@ -6669,7 +7743,28 @@
                 $('ep-photo-preview').style.display = 'none';
                 $('ep-photo-placeholder').style.display = 'flex'
             }
+            if (userProfile.coverURL && isValidUrl(userProfile.coverURL)) {
+                $('ep-cover-preview').src = userProfile.coverURL;
+                $('ep-cover-preview').style.display = 'block';
+                $('ep-cover-placeholder').style.display = 'none'
+            } else {
+                $('ep-cover-preview').style.display = 'none';
+                $('ep-cover-placeholder').style.display = 'flex'
+            }
         }
+
+        function previewCoverPhoto(inputEl) {
+            const file = inputEl.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                $('ep-cover-preview').src = e.target.result;
+                $('ep-cover-preview').style.display = 'block';
+                $('ep-cover-placeholder').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
         async function uploadToImgBB(file) {
             const fd = new FormData();
             fd.append('key', IMGBB);
@@ -6689,6 +7784,7 @@
             const name = $('ep-name').value.trim();
             const dob = $('ep-dob').value;
             const file = $('ep-photo-file').files[0];
+            const coverFile = $('ep-cover-file').files[0];
             const facebook = $('ep-facebook').value.trim();
             const whatsapp = $('ep-whatsapp').value.trim();
             const telegram = $('ep-telegram').value.trim();
@@ -6707,10 +7803,18 @@
                     photoURL = await uploadToImgBB(file);
                     $('profile-upload-progress').style.display = 'none'
                 }
+                let coverURL = userProfile.coverURL || '';
+                if (coverFile) {
+                    $('cover-upload-progress').style.display = 'block';
+                    $('cover-upload-status').textContent = 'Uploading cover…';
+                    coverURL = await uploadToImgBB(coverFile);
+                    $('cover-upload-progress').style.display = 'none'
+                }
                 await db.collection('users').doc(currentUser.uid).update({
                     name,
                     dob,
                     photoURL,
+                    coverURL,
                     socialLinks: {
                         facebook,
                         whatsapp,
@@ -6722,6 +7826,7 @@
                     name,
                     dob,
                     photoURL,
+                    coverURL,
                     socialLinks: {
                         facebook,
                         whatsapp,
@@ -6735,7 +7840,8 @@
                 showToast('Failed: ' + e.message, 'error')
             } finally {
                 setBtnLoading('ep-btn', false, '<i class="fas fa-save"></i> Save Changes');
-                $('profile-upload-progress').style.display = 'none'
+                $('profile-upload-progress').style.display = 'none';
+                $('cover-upload-progress').style.display = 'none'
             }
         }
 
@@ -7191,7 +8297,8 @@
                     const u = userCache[t.otherId] || {};
                     const av = u.photoURL || makeAvatar(u.name || '?');
                     const unread = t.unread && t.unread[currentUser.uid];
-                    html += `<div class="msg-thread-item" onclick="startChat('${t.otherId}','${(u.name||'Unknown').replace(/'/g,"\\'")}','${u.photoURL||''}')"><img src="${av}" class="avatar" style="width:52px;height:52px;flex-shrink:0" data-name="${u.name||''}" onerror="onImgError(this)"><div class="msg-thread-body"><div class="msg-thread-name">${u.name||'Unknown'}${unread?`<span class="msg-unread-dot"></span>`:''}</div><div class="msg-thread-preview c1">${t.lastMessage||'Say hello!'}</div></div><div class="msg-thread-time">${timeAgo(t.updatedAt)}</div></div>`
+                    const safeName = (u.name || 'Unknown').replace(/'/g, "\\'");
+                    html += `<div class="msg-thread-item"><img src="${av}" class="avatar msg-avatar-click" style="width:52px;height:52px;flex-shrink:0" data-name="${u.name||''}" onerror="onImgError(this)" onclick="event.stopPropagation();viewUser('${t.otherId}')"><div class="msg-thread-body" onclick="startChat('${t.otherId}','${safeName}','${u.photoURL||''}')"><div class="msg-thread-name msg-name-click" onclick="event.stopPropagation();viewUser('${t.otherId}')">${escapeHTML(u.name||'Unknown')}${unread?`<span class="msg-unread-dot"></span>`:''}</div><div class="msg-thread-preview c1">${escapeHTML(t.lastMessage||'Say hello!')}</div></div><div class="msg-thread-time" onclick="startChat('${t.otherId}','${safeName}','${u.photoURL||''}')">${timeAgo(t.updatedAt)}</div></div>`
                 });
                 html += '</div>';
                 c.innerHTML = html;
@@ -7200,6 +8307,8 @@
                 c.innerHTML = `<div class="empty"><h3 style="color:var(--danger)">Failed to load</h3><p>${e.message}</p></div>`
             }
         }
+
+        let unsubChatUserStatus = null;
 
         async function startChat(otherId, otherName, otherPhoto) {
             if (!currentUser) return;
@@ -7224,7 +8333,27 @@
             $('chat-other-avatar').src = av;
             $('chat-other-avatar').dataset.name = otherName;
             $('chat-other-name').textContent = otherName;
-            $('chat-status-text').textContent = '● Active now';
+            $('chat-status-text').textContent = '…';
+            // Real-time online / last-seen status
+            if (unsubChatUserStatus) {
+                unsubChatUserStatus();
+                unsubChatUserStatus = null
+            }
+            unsubChatUserStatus = db.collection('users').doc(otherId).onSnapshot(doc => {
+                const statusEl = $('chat-status-text');
+                if (!statusEl || !doc.exists) return;
+                const u = doc.data();
+                const isOnline = u.online === true && u.lastSeen && (Date.now() - (u.lastSeen.toMillis ? u.lastSeen.toMillis() : 0)) < 60000;
+                if (isOnline) {
+                    statusEl.textContent = '● Online';
+                    statusEl.style.color = 'var(--success)';
+                } else if (u.lastSeen) {
+                    statusEl.textContent = 'Last seen ' + timeAgo(u.lastSeen);
+                    statusEl.style.color = '';
+                } else {
+                    statusEl.textContent = '';
+                }
+            }, () => {});
             // Ensure chat doc exists
             const chatRef = db.collection('chats').doc(chatId);
             const chatDoc = await chatRef.get();
@@ -7248,6 +8377,7 @@
             }
             const msgsEl = $('chat-messages');
             msgsEl.innerHTML = loadingHTML();
+            let firstMsgSnap = true;
             unsubChat = db.collection('chats').doc(chatId).collection('messages').orderBy('createdAt', 'asc').limit(100).onSnapshot(snap => {
                 msgsEl.innerHTML = '';
                 snap.forEach(d => {
@@ -7261,9 +8391,30 @@
                     const textHTML = m.text ? `<div class="${m.imageUrl?'msg-img-caption':''}">${escapeHTML(m.text)}</div>` : '';
                     msgsEl.innerHTML += `<div class="msg-bubble-wrap ${isMe?'me':''}"><img src="${isMe?'':(currentChatOther.photo||makeAvatar(currentChatOther.name))}" class="avatar msg-avatar ${isMe?'hidden':''}" data-name="${currentChatOther.name}" onerror="onImgError(this)" style="${isMe?'display:none':''}"><div class="msg-bubble ${isMe?'me':'them'} ${m.imageUrl?'has-img':''}">${imgHTML}${textHTML}<span class="msg-time ${isMe?'me':''}">${time}</span></div></div>`
                 });
+                if (!firstMsgSnap) {
+                    snap.docChanges().forEach(ch => {
+                        if (ch.type === 'added' && ch.doc.data().senderId !== currentUser.uid) playPopSound();
+                    });
+                }
+                firstMsgSnap = false;
                 msgsEl.scrollTop = msgsEl.scrollHeight;
             }, err => console.warn(err));
             if (viewHistory[viewHistory.length - 1] !== 'chat') viewHistory.push('chat');
+        }
+
+        /* Auto-grow chat textarea up to 3 lines; Enter sends, Shift+Enter = newline */
+        function autoGrowChatInput(el) {
+            el.style.height = 'auto';
+            const lineHeight = 20; // approx px per line at current font/line-height
+            const maxH = lineHeight * 3 + 20;
+            el.style.height = Math.min(el.scrollHeight, maxH) + 'px';
+        }
+
+        function handleChatInputKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMsg();
+            }
         }
 
         async function sendMsg() {
@@ -7271,6 +8422,8 @@
             const text = inp.value.trim();
             if (!text || !currentChatId) return;
             inp.value = '';
+            inp.style.height = 'auto';
+            playPopSound();
             try {
                 const chatRef = db.collection('chats').doc(currentChatId);
                 await chatRef.collection('messages').add({
@@ -7322,6 +8475,7 @@
                     senderName: userProfile?.name || '',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
+                playPopSound();
                 await chatRef.update({
                     lastMessage: '📷 Photo',
                     lastSenderId: currentUser.uid,
@@ -7341,6 +8495,10 @@
             if (unsubChat) {
                 unsubChat();
                 unsubChat = null
+            }
+            if (unsubChatUserStatus) {
+                unsubChatUserStatus();
+                unsubChatUserStatus = null
             }
             currentChatId = null;
             currentChatOther = null;
@@ -7429,6 +8587,7 @@
             dashboard: admLoadDashboard,
             posts: admLoadPosts,
             users: admLoadUsersView,
+            reports: admLoadReports,
             notifications: admLoadNotifHistory,
             messages: admLoadAllChats
         };
@@ -7456,7 +8615,7 @@
             document.querySelectorAll('#admin-view .adm-sub').forEach(v => v.classList.remove('active'));
             const el = $(`adm-${name}-view`);
             if (el) el.classList.add('active');
-            ['dashboard', 'posts', 'users', 'notifications', 'messages'].forEach(t => {
+            ['dashboard', 'posts', 'users', 'reports', 'notifications', 'messages'].forEach(t => {
                 const b = $(`adm-nav-${t}`);
                 if (b) b.classList.toggle('active', t === name)
             });
@@ -7474,6 +8633,15 @@
                     badge.textContent = snap.size;
                     badge.classList.remove('hidden')
                 } else badge.classList.add('hidden')
+            } catch (_) {}
+            try {
+                const rsnap = await db.collection('reports').where('status', '==', 'pending').get();
+                const rbadge = $('adm-reports-badge');
+                if (!rbadge) return;
+                if (rsnap.size > 0) {
+                    rbadge.textContent = rsnap.size;
+                    rbadge.classList.remove('hidden')
+                } else rbadge.classList.add('hidden')
             } catch (_) {}
         }
 
@@ -7619,6 +8787,49 @@
         }
 
         /* ── ADMIN: POST REVIEW MODAL (পুঙ্খানুপুঙ্খভাবে পোস্ট পরীক্ষা) ── */
+        let admReviewImagesState = [];
+        let admReviewLinksState = [];
+
+        function admRenderReviewGallery() {
+            const wrap = document.getElementById('adm-review-gallery-wrap');
+            if (!wrap) return;
+            if (!admReviewImagesState.length) {
+                wrap.innerHTML = `<div class="adm-review-noimg"><i class="fas fa-image"></i> No images uploaded</div>`;
+                return;
+            }
+            wrap.innerHTML = `<div class="adm-review-gallery">${admReviewImagesState.map((im,i)=>`<div class="pm-img-thumb ${im.removed?'removed':''}"><img src="${im.url}" onerror="onImgError(this)" loading="lazy"><div class="pm-img-x" onclick="event.stopPropagation();toggleReviewImageRemove(${i})" title="${im.removed?'Restore':'Cut this image'}"><i class="fas ${im.removed?'fa-undo':'fa-times'}"></i></div></div>`).join('')}</div>`;
+        }
+
+        function toggleReviewImageRemove(i) {
+            admReviewImagesState[i].removed = !admReviewImagesState[i].removed;
+            admRenderReviewGallery();
+        }
+
+        function admRenderReviewLinks() {
+            const wrap = document.getElementById('adm-review-links-wrap');
+            if (!wrap) return;
+            if (!admReviewLinksState.length) {
+                wrap.innerHTML = `<div class="adm-review-noimg"><i class="fas fa-link-slash"></i> No download links provided</div>`;
+                return;
+            }
+            wrap.innerHTML = admReviewLinksState.map((l, i) => {
+                const pi = getPlatformInfo(l.platform);
+                return `<div class="pm-link-row ${l.removed?'removed':''}">
+            <div class="adm-review-link-info" style="flex:1;min-width:0">
+              <i class="${pi.icon}" style="color:${pi.color}"></i>
+              <span class="c1">${escapeHTML(l.url)}</span>
+            </div>
+            <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2);flex-shrink:0" onclick="window.open('${l.url.replace(/'/g,"\\'")}','_blank','noopener')"><i class="fas fa-arrow-up-right-from-square"></i></button>
+            <button class="pm-link-x" onclick="toggleReviewLinkRemove(${i})" title="${l.removed?'Restore':'Cut this link'}"><i class="fas ${l.removed?'fa-undo':'fa-times'}"></i></button>
+          </div>`
+            }).join('');
+        }
+
+        function toggleReviewLinkRemove(i) {
+            admReviewLinksState[i].removed = !admReviewLinksState[i].removed;
+            admRenderReviewLinks();
+        }
+
         function admReviewPost(id) {
             const p = admPostsCache[id];
             if (!p) {
@@ -7627,9 +8838,10 @@
             }
             admReviewPostId = id;
 
-            const imgs = p.images || [];
-            const galHTML = imgs.length ? `<div class="adm-review-gallery">${imgs.map((im,i) => `<img src="${im}" alt="Post image ${i+1}" onerror="onImgError(this)" loading="lazy" onclick="openLightbox('${im}',${JSON.stringify(imgs).replace(/"/g,'&quot;')})">`).join('')}</div>` :
-                `<div class="adm-review-noimg"><i class="fas fa-image"></i> No images uploaded</div>`;
+            admReviewImagesState = (p.images || []).map(url => ({
+                url,
+                removed: false
+            }));
 
             let links = [];
             if (p.downloadLinks && p.downloadLinks.length) {
@@ -7643,16 +8855,10 @@
                     platform: ''
                 }];
             }
-            const linksHTML = links.length ? links.map((l, i) => {
-                const pi = getPlatformInfo(l.platform);
-                return `<div class="adm-review-link-row">
-            <div class="adm-review-link-info">
-              <i class="${pi.icon}" style="color:${pi.color}"></i>
-              <span class="c1">${escapeHTML(l.url)}</span>
-            </div>
-            <button class="btn btn-sm" style="background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(18,70,214,.2);flex-shrink:0" onclick="window.open('${l.url.replace(/'/g,"\\'")}','_blank','noopener')"><i class="fas fa-arrow-up-right-from-square"></i> Check Link</button>
-          </div>`
-            }).join('') : `<div class="adm-review-noimg"><i class="fas fa-link-slash"></i> No download links provided</div>`;
+            admReviewLinksState = links.map(l => ({
+                ...l,
+                removed: false
+            }));
 
             const promoHTML = (p.promoLink && isValidUrl(p.promoLink)) ? `<div class="adm-review-link-row">
           <div class="adm-review-link-info"><i class="fas fa-video" style="color:var(--accent3)"></i><span class="c1">${escapeHTML(p.promoLink)}</span></div>
@@ -7660,7 +8866,7 @@
         </div>` : '';
 
             $('adm-review-content').innerHTML = `
-        ${galHTML}
+        <div id="adm-review-gallery-wrap"></div>
         <div style="padding:16px 18px 4px">
           <div style="font-size:18px;font-weight:800;color:var(--t1);font-family:var(--fd);margin-bottom:6px">${escapeHTML(p.title||'Untitled')}</div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
@@ -7669,9 +8875,12 @@
           </div>
           <div class="adm-sec-title" style="padding:0 0 8px">Description</div>
           <div style="font-size:13.5px;color:var(--t2);line-height:1.6;white-space:pre-line;margin-bottom:18px">${escapeHTML(p.description||'No description provided.')}</div>
-          <div class="adm-sec-title" style="padding:0 0 8px">Download Links — verify before approving</div>
-          <div class="adm-review-links">${linksHTML}${promoHTML}</div>
+          <div class="adm-sec-title" style="padding:0 0 8px">Download Links — verify, and cut anything suspicious before approving</div>
+          <div id="adm-review-links-wrap" class="adm-review-links"></div>
+          ${promoHTML}
         </div>`;
+            admRenderReviewGallery();
+            admRenderReviewLinks();
 
             const actionsEl = $('adm-review-actions');
             if (p.status === 'pending') {
@@ -7683,20 +8892,51 @@
           <button class="btn btn-ghost" style="flex:1" onclick="admReviewAction('rejectEdit')"><i class="fas fa-times"></i> Reject Edit</button>
           <button class="btn btn-primary" style="flex:1" onclick="admReviewAction('approveEdit')"><i class="fas fa-check-double"></i> Approve Edit</button>`;
             } else {
-                actionsEl.innerHTML = `<button class="btn btn-ghost btn-full" onclick="admCloseReviewModal()"><i class="fas fa-times"></i> Close</button>`;
+                actionsEl.innerHTML = `
+          <button class="btn btn-ghost" style="flex:1" onclick="admCloseReviewModal()"><i class="fas fa-times"></i> Close</button>
+          <button class="btn btn-primary" style="flex:1" onclick="admSaveReviewTrim('${id}')"><i class="fas fa-save"></i> Save Trim</button>`;
             }
             $('adm-review-modal').classList.remove('hidden');
+        }
+
+        /* Apply the removed-image/link selections to Firestore */
+        async function admApplyReviewTrim(id) {
+            const images = admReviewImagesState.filter(i => !i.removed).map(i => i.url);
+            const downloadLinks = admReviewLinksState.filter(l => !l.removed).map(l => ({
+                url: l.url,
+                platform: l.platform || ''
+            }));
+            await db.collection('posts').doc(id).update({
+                images,
+                downloadLinks,
+                downloadLink: firebase.firestore.FieldValue.delete()
+            });
+        }
+
+        /* Trim already-approved post without changing status */
+        async function admSaveReviewTrim(id) {
+            try {
+                await admApplyReviewTrim(id);
+                showToast('Images/links updated ✅', 'success');
+                admCloseReviewModal();
+                admLoadPosts();
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
         }
 
         async function admReviewAction(action) {
             const id = admReviewPostId;
             if (!id) return;
             admCloseReviewModal();
-            if (action === 'approve') await admApprovePost(id);
-            else if (action === 'reject') await admRejectPost(id);
+            if (action === 'approve') {
+                await admApplyReviewTrim(id);
+                await admApprovePost(id);
+            } else if (action === 'reject') await admRejectPost(id);
             else if (action === 'approveEdit') await admApproveEdit(id);
             else if (action === 'rejectEdit') await admRejectEdit(id);
         }
+
 
         function admCloseReviewModal() {
             $('adm-review-modal').classList.add('hidden');
@@ -7804,6 +9044,155 @@
             }
         }
 
+        /* ═══════════════════════════════════
+           ADMIN: REPORTS (feature 6)
+        ═══════════════════════════════════ */
+        let admReportTab = 'pending';
+
+        function admSetReportTab(btn) {
+            btn.closest('.adm-tab-row').querySelectorAll('.adm-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            admReportTab = btn.dataset.rt;
+            admLoadReports()
+        }
+
+        async function admLoadReports() {
+            const el = $('reports-content');
+            if (!el) return;
+            el.innerHTML = skeletonListHTML(6);
+            try {
+                let q = db.collection('reports').orderBy('createdAt', 'desc');
+                if (admReportTab === 'pending') q = q.where('status', '==', 'pending');
+                else if (admReportTab === 'resolved') q = q.where('status', '==', 'resolved');
+                const snap = await q.limit(100).get();
+                if (snap.empty) {
+                    el.innerHTML = '<div class="empty"><div class="empty-icon"><i class="fas fa-flag"></i></div><h3>No reports</h3><p>No reports found for this filter.</p></div>';
+                    return
+                }
+                let html = '';
+                snap.forEach(d => {
+                    const r = {
+                        id: d.id,
+                        ...d.data()
+                    };
+                    const resolved = r.status === 'resolved';
+                    html += `<div class="adm-report-row" onclick="admOpenReportDetail('${d.id}')">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="chip ${resolved?'chip-resolved':'chip-report'}"><i class="fas ${resolved?'fa-check':'fa-flag'}"></i> ${resolved?'Resolved':'Pending'}</span>
+              <span style="font-size:12px;color:var(--t3);font-weight:600">${timeAgo(r.createdAt)}</span>
+            </div>
+            <div style="font-size:14px;font-weight:800;color:var(--t1);font-family:var(--fd)" class="c1">${escapeHTML(r.postTitle||'(Untitled post)')}</div>
+            <div style="font-size:12.5px;color:var(--t2);font-weight:600">Reason: ${escapeHTML(r.reason||'—')}</div>
+            ${r.details?`<div style="font-size:12px;color:var(--t3)" class="c2">${escapeHTML(r.details)}</div>`:''}
+            <div style="font-size:11.5px;color:var(--t3);font-weight:500">Reported by ${escapeHTML(r.reporterName||'Unknown')}</div>
+          </div>`
+                });
+                el.innerHTML = html
+            } catch (e) {
+                console.error(e);
+                el.innerHTML = `<div class="empty"><p style="color:var(--danger)">${escapeHTML(e.message)}</p></div>`
+            }
+        }
+
+        async function admOpenReportDetail(reportId) {
+            try {
+                const doc = await db.collection('reports').doc(reportId).get();
+                if (!doc.exists) return;
+                const r = doc.data();
+                admReviewPostId = r.postId;
+                $('adm-review-content').innerHTML = `<div style="padding:18px">
+          <div style="font-size:15px;font-weight:800;color:var(--t1);font-family:var(--fd);margin-bottom:6px">${escapeHTML(r.postTitle||'(Untitled post)')}</div>
+          <div style="font-size:13px;color:var(--t2);margin-bottom:4px"><strong>Reason:</strong> ${escapeHTML(r.reason||'—')}</div>
+          ${r.details?`<div style="font-size:13px;color:var(--t2);margin-bottom:4px"><strong>Details:</strong> ${escapeHTML(r.details)}</div>`:''}
+          <div style="font-size:12px;color:var(--t3);margin-top:8px">Reported by ${escapeHTML(r.reporterName||'Unknown')} · ${timeAgo(r.createdAt)}</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:4px">Status: ${r.status}</div>
+        </div>`;
+                $('adm-review-actions').innerHTML = `
+          <button class="btn btn-ghost" style="flex:1" onclick="admCloseReviewModal()"><i class="fas fa-times"></i> Close</button>
+          ${r.status!=='resolved'?`<button class="btn btn-outline" style="flex:1" onclick="admResolveReport('${reportId}')"><i class="fas fa-check"></i> Mark Resolved</button>`:''}
+          <button class="btn btn-danger" style="flex:1" onclick="admDeleteReportedPost('${reportId}','${r.postId}')"><i class="fas fa-trash"></i> Delete Post</button>
+        `;
+                $('adm-review-modal').classList.remove('hidden');
+            } catch (e) {
+                showToast('Failed to load report', 'error')
+            }
+        }
+
+        async function admResolveReport(reportId) {
+            try {
+                await db.collection('reports').doc(reportId).update({
+                    status: 'resolved',
+                    resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    resolvedBy: currentUser.uid
+                });
+                showToast('Report marked as resolved ✅', 'success');
+                admCloseReviewModal();
+                admLoadReports();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        async function admDeleteReportedPost(reportId, postId) {
+            const ok = await confirmDialog('Delete Post', 'Delete the reported post permanently? This cannot be undone.');
+            if (!ok) return;
+            try {
+                if (postId) await db.collection('posts').doc(postId).delete().catch(() => {});
+                await db.collection('reports').doc(reportId).update({
+                    status: 'resolved',
+                    resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    resolvedBy: currentUser.uid,
+                    actionTaken: 'post_deleted'
+                });
+                showToast('Post deleted and report resolved', 'success');
+                admCloseReviewModal();
+                admLoadReports();
+                admLoadPendingBadge()
+            } catch (e) {
+                showToast(e.message, 'error')
+            }
+        }
+
+        let pmImagesState = [];
+        let pmLinksState = [];
+
+        function admRenderPmImages() {
+            const el = $('pm-images-list');
+            if (!el) return;
+            if (!pmImagesState.length) {
+                el.innerHTML = `<div class="adm-review-noimg" style="margin:0">No images uploaded</div>`;
+                return;
+            }
+            el.innerHTML = pmImagesState.map((im, i) => `<div class="pm-img-thumb ${im.removed?'removed':''}"><img src="${im.url}" onerror="onImgError(this)" loading="lazy"><div class="pm-img-x" onclick="togglePmImageRemove(${i})" title="${im.removed?'Restore':'Cut this image'}"><i class="fas ${im.removed?'fa-undo':'fa-times'}"></i></div></div>`).join('');
+        }
+
+        function togglePmImageRemove(i) {
+            pmImagesState[i].removed = !pmImagesState[i].removed;
+            admRenderPmImages();
+        }
+
+        function admRenderPmLinks() {
+            const el = $('pm-links-list');
+            if (!el) return;
+            if (!pmLinksState.length) {
+                el.innerHTML = `<div class="adm-review-noimg" style="margin:0">No download links</div>`;
+                return;
+            }
+            el.innerHTML = pmLinksState.map((l, i) => {
+                const pi = getPlatformInfo(l.platform);
+                return `<div class="pm-link-row ${l.removed?'removed':''}">
+            <div class="pm-link-info"><i class="${pi.icon}" style="color:${pi.color};margin-right:6px"></i>${escapeHTML(l.url)}</div>
+            <button class="pm-link-x" onclick="togglePmLinkRemove(${i})" title="${l.removed?'Restore':'Cut this link'}"><i class="fas ${l.removed?'fa-undo':'fa-times'}"></i></button>
+          </div>`
+            }).join('');
+        }
+
+        function togglePmLinkRemove(i) {
+            pmLinksState[i].removed = !pmLinksState[i].removed;
+            admRenderPmLinks();
+        }
+
         async function admOpenPostEdit(id) {
             try {
                 const doc = await db.collection('posts').doc(id).get();
@@ -7820,6 +9209,31 @@
                 $('pm-cat').value = p.category || 'Skins';
                 $('pm-desc').value = p.description || '';
                 $('pm-status').value = p.status || 'pending';
+
+                pmImagesState = (p.images || []).map(url => ({
+                    url,
+                    removed: false
+                }));
+                admRenderPmImages();
+
+                let links = [];
+                if (p.downloadLinks && p.downloadLinks.length) {
+                    links = p.downloadLinks.map(l => ({
+                        url: l.url,
+                        platform: l.platform
+                    }));
+                } else if (p.downloadLink) {
+                    links = [{
+                        url: p.downloadLink,
+                        platform: ''
+                    }];
+                }
+                pmLinksState = links.map(l => ({
+                    ...l,
+                    removed: false
+                }));
+                admRenderPmLinks();
+
                 if (p.pendingEdit) {
                     const diff = $('pm-diff-content');
                     diff.innerHTML = `
@@ -7846,7 +9260,9 @@
 
         function admClosePostModal() {
             $('post-modal').classList.add('hidden');
-            $('pm-post-id').value = ''
+            $('pm-post-id').value = '';
+            pmImagesState = [];
+            pmLinksState = [];
         }
 
         async function admSavePostChanges() {
@@ -7854,11 +9270,19 @@
             if (!id) return;
             setBtnLoading('pm-save', true);
             try {
+                const images = pmImagesState.filter(i => !i.removed).map(i => i.url);
+                const downloadLinks = pmLinksState.filter(l => !l.removed).map(l => ({
+                    url: l.url,
+                    platform: l.platform || ''
+                }));
                 await db.collection('posts').doc(id).update({
                     title: $('pm-title').value.trim(),
                     category: $('pm-cat').value,
                     description: $('pm-desc').value.trim(),
                     status: $('pm-status').value,
+                    images,
+                    downloadLinks,
+                    downloadLink: firebase.firestore.FieldValue.delete(),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 showToast('Post updated ✅', 'success');
@@ -7953,6 +9377,8 @@
             el.innerHTML = html
         }
 
+        let selectedBanHours = 0; // 0 = permanent
+
         function admOpenUserEdit(uid) {
             const u = admAllUsersCache.find(x => x.id === uid);
             if (!u) return;
@@ -7966,7 +9392,11 @@
             $('user-modal-role').value = u.role || 'user';
             $('user-modal-badge').value = u.badge || 'newbie';
             const tog = $('user-modal-ban-toggle');
-            tog.classList.toggle('on', u.banned === true);
+            const isBanned = u.banned === true;
+            tog.classList.toggle('on', isBanned);
+            $('ban-duration-wrap').style.display = isBanned ? 'block' : 'none';
+            selectedBanHours = 0;
+            document.querySelectorAll('.ban-dur-btn').forEach(b => b.classList.toggle('active', b.dataset.h === '0'));
             $('user-modal').classList.remove('hidden')
         }
 
@@ -7976,7 +9406,14 @@
         }
 
         function admToggleBanToggle() {
-            $('user-modal-ban-toggle').classList.toggle('on')
+            const on = $('user-modal-ban-toggle').classList.toggle('on');
+            $('ban-duration-wrap').style.display = on ? 'block' : 'none';
+        }
+
+        function selectBanDuration(el) {
+            document.querySelectorAll('.ban-dur-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            selectedBanHours = parseInt(el.dataset.h) || 0;
         }
 
         async function admSaveUserChanges() {
@@ -7989,6 +9426,7 @@
                 const role = $('user-modal-role').value;
                 const badge = $('user-modal-badge').value;
                 const banned = $('user-modal-ban-toggle').classList.contains('on');
+                const banUntil = banned ? (selectedBanHours > 0 ? firebase.firestore.Timestamp.fromMillis(Date.now() + selectedBanHours * 3600000) : null) : null;
 
                 if (!name) {
                     showToast('Please enter a name', 'warn');
@@ -8008,8 +9446,22 @@
                     name,
                     role,
                     badge,
-                    banned
+                    banned,
+                    banUntil
                 });
+
+                // ডিভাইস-লেভেল ব্যান — একই ডিভাইস থেকে নতুন আইডি খোলা ঠেকাতে
+                if (oldUser && oldUser.deviceId) {
+                    if (gotBanned) {
+                        await db.collection('bannedDevices').doc(oldUser.deviceId).set({
+                            bannedUserId: admEditUserId,
+                            banUntil,
+                            bannedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).catch(() => {});
+                    } else if (gotUnbanned) {
+                        await db.collection('bannedDevices').doc(oldUser.deviceId).delete().catch(() => {});
+                    }
+                }
 
                 // ২. ইউজারের পুরনো সব পোস্টে নতুন ব্যাচ ও নাম আপডেট করা
                 const bInfo = getBadge(role, badge);
@@ -8036,17 +9488,19 @@
                     name,
                     role,
                     badge,
-                    banned
+                    banned,
+                    banUntil
                 };
 
                 const now = firebase.firestore.FieldValue.serverTimestamp();
 
                 // ৪. স্পেশাল পপ-আপ নোটিফিকেশন পাঠানো
                 if (gotBanned) {
+                    const durText = selectedBanHours > 0 ? `${selectedBanHours} ঘণ্টার জন্য` : 'স্থায়ীভাবে';
                     await db.collection('notifications').add({
                         userId: admEditUserId,
                         title: '⚠️ Account Suspended',
-                        message: 'Your account has been suspended. Please contact support.',
+                        message: `আপনার অ্যাকাউন্ট ${durText} সাসপেন্ড করা হয়েছে। বিস্তারিত জানতে সাপোর্টের সাথে যোগাযোগ করুন।`,
                         read: false,
                         createdAt: now,
                         sentBy: currentUser.uid,
@@ -8416,10 +9870,6 @@
                 // Already on home — stay, do nothing
             });
             history.pushState(null, '', location.href);
-            // Chat enter key
-            $('chat-inp') && $('chat-inp').addEventListener('keydown', e => {
-                if (e.key === 'Enter') sendMsg()
-            });
         });
     </script>
     <script>
