@@ -1,22 +1,25 @@
 {
   "name": "Bussid Mods Hub",
-  "short_name": "Bussid Mods",
-  "description": "Best mods for Bus Simulator Indonesia",
+  "short_name": "BUSSID MOD",
+    "version": "4.0.2",
+  "description": "Bus Simulator Indonesia Mod Platform",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#333333",
+  "background_color": "#070e22",
+  "theme_color": "#1246d6",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "./icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
