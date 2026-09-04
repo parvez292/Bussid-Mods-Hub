@@ -4,7 +4,7 @@
    - Firebase Cloud Messaging background push notifications
    ═══════════════════════════════════════════════ */
 
-const CACHE_NAME = 'bussid-mods-v5.4.1';
+const CACHE_NAME = 'bussid-mods-v5.5.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
