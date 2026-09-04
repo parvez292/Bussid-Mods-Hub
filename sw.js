@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════
-   Bussid Mods Hub — Service Worker
-   - Offline caching for the PWA shell
-   - Firebase Cloud Messaging background push notifications
-   ═══════════════════════════════════════════════ */
-
 const CACHE_NAME = 'bussid-mods-v5.5.0';
 const ASSETS_TO_CACHE = [
   './',
@@ -35,6 +29,18 @@ self.addEventListener('activate', (event) => {
         })
       );
     })
+  );
+  self.clients.claim();
+});
+
+// Fetch Event
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request);
+    })
+  );
+});    })
   );
   self.clients.claim();
 });
