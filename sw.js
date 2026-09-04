@@ -3,6 +3,7 @@ const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
+  './index.js', // জিপ ফাইলে থাকা JS ফাইলটি যুক্ত করা হয়েছে[span_1](start_span)[span_1](end_span)
   './icon-192.png',
   './icon-512.png'
 ];
@@ -11,19 +12,21 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log('[Service Worker] Caching App Shell');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
   self.skipWaiting();
 });
 
-// Activate Event
+// Activate Event: পুরনো ভার্সন (যেমন v5.4.1) ডিলিট করবে
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log('[Service Worker] Deleting old cache:', key);
             return caches.delete(key);
           }
         })
@@ -33,7 +36,29 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event
+// Fetch Event: Stale-While-Revalidate (অ্যাডভান্সড পদ্ধতি)
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      // নেটওয়ার্ক থেকে ফাইল আনার চেষ্টা করবে
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // রেসপন্স ঠিক থাকলে ক্যাশে নতুন ডেটা আপডেট করে রাখবে
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        // অফলাইনে থাকলে এবং নেটওয়ার্ক ফেইল করলে ক্যাশ থেকে দেখাবে
+      });
+
+      // ক্যাশে ডেটা থাকলে সাথে সাথে দেখাবে, না থাকলে নেটওয়ার্কের জন্য অপেক্ষা করবে
+      return cachedResponse || fetchPromise;
+    })
+  );
+});
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
