@@ -1,13 +1,15 @@
 {
   "name": "Bussid Mods Hub",
   "short_name": "BUSSID MOD",
-    "version": "4.0.2",
+  "version": "5.4.1",
   "description": "Bus Simulator Indonesia Mod Platform",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#070e22",
   "theme_color": "#1246d6",
   "orientation": "portrait",
+  "gcm_sender_id": "235067322832",
   "icons": [
     {
       "src": "icon-192.png",
